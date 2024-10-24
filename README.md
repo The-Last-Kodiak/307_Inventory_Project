@@ -1,1 +1,8 @@
-# 307_Inventory_Project
+### 307_Inventory_Project
+
+## Contributing
+
+* React/Javascript
+* Tools:
+* - Prettier
+  - ESLint
