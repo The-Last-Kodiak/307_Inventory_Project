@@ -4,5 +4,5 @@
 
 * React/Javascript
 * Tools:
-* - Prettier
+  - Prettier
   - ESLint
