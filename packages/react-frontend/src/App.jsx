@@ -1,21 +1,35 @@
-import React from 'react';
-import { Routes, Route } from 'react-router-dom';
-import NavBar from './components/Navbar';
+import React, { useState } from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Home from './pages/Home';
-import About from "./pages/About";
-import Account from "./pages/Account";
+import LogIn from './pages/LogIn';
 
 
 const App = () => {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  const handleAuth = () => {
+    console.log("Authentication successful")
+    setIsAuthenticated(true);
+  }
+
   return (
-    <div>
-      <NavBar />
+    <Router>
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/About" element={<About />} />
-        <Route path="/Account" element={<Account />} />
+        {/* default route redirects to login */}
+        <Route path="/" element={<Navigate to ="/login" replace />} />
+
+        {/* login route */}
+        <Route path="/login" element={<LogIn handleAuth={handleAuth} />} />
+
+        <Route
+          path="/home"
+          element={
+            isAuthenticated ? (<Home />) : (<Navigate to="/login" replace/>)
+          } 
+        />
       </Routes>
-    </div>
+    </Router>
+    
   );
 };
 
