@@ -1,0 +1,6 @@
+/* src/pages/LogIn.module.css */
+.container {
+    max-width: 500px;
+    margin: 30px auto;
+    padding: 30px;
+}

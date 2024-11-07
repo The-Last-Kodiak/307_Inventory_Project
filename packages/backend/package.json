@@ -4,12 +4,13 @@
   "type": "module",
   "main": "backend.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node backend.js"
   },
   "author": "",
   "license": "ISC",
-  "description": "",
   "dependencies": {
     "express": "^4.21.1"
-  }
+  },
+  "description": ""
 }
