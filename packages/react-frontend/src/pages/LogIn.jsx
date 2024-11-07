@@ -1,6 +1,8 @@
+// src/pages/LogIn.jsx
 import React from 'react';
 import { useNavigate } from "react-router-dom";
 import LogInForm from "./LogInForm";
+import styles from "./LogIn.module.css";
 
 const LogIn = ({ handleAuth }) => {
     // we need to return a promise that connects to the backend,
@@ -13,7 +15,7 @@ const LogIn = ({ handleAuth }) => {
         navigate("/home");
     }
     return (
-    <div className="container">
+    <div className={`container ${styles.container}`}>
         <h1>Supply<span>Hub</span></h1>
         <LogInForm login={login}/>
     </div>
