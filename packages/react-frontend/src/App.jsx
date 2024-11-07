@@ -1,7 +1,10 @@
+// src/pages/App.jsx
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Home from './pages/Home';
 import LogIn from './pages/LogIn';
+import About from "./pages/About";
+import Account from "./pages/Account";
 
 
 const App = () => {
@@ -26,6 +29,20 @@ const App = () => {
           element={
             isAuthenticated ? (<Home />) : (<Navigate to="/login" replace/>)
           } 
+        />
+
+        <Route
+          path="/about"
+          element={
+            isAuthenticated ? (<About />) : (<Navigate to="/login" replace />)
+          }
+        />
+
+        <Route
+          path="/account"
+          element={
+            isAuthenticated ? (<Account />) : (<Navigate to="/login" replace />)
+          }
         />
       </Routes>
     </Router>
