@@ -29,7 +29,6 @@
   "license": "ISC",
   "description": "",
   "workspaces": [
-    "backend",
-    "frontend"
+    "packages/*"
   ]
 }
