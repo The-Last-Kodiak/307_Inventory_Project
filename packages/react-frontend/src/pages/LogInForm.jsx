@@ -1,4 +1,6 @@
+// src/pages/LogInForm.jsx
 import React, { useState } from "react";
+import "./LogIn.module.css";
 
 const LogInForm = ({ login }) => {
     // reset form upon load
