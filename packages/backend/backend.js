@@ -1,5 +1,6 @@
 import express from "express";
 import user_rest from "./user.js";
+import bcrypt from "bcrypt"
 const app = express();
 const port = 8000;
 
@@ -51,6 +52,12 @@ app.post("/signup", (req, res) => {
                 return;
             }
         }
+        const salt = 10;
+        const hashedPassword = await bcrypt.hash(password, salt);
+        account = {
+            "username" : account_name,
+            "password" : hashedPassword
+        };
 
         //adds user to database
         let promise = user_rest.addUser(account);
