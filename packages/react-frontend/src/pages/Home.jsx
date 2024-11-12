@@ -10,9 +10,9 @@ const Home = () => {
     <div className='container'>
       <Navbar />
       <div className="hero">
-        <h1>Welcome!</h1>
+        <h1 className={styles.head}>Welcome!</h1>
 
-        <h2>View Your <span>Supply</span> Today</h2>
+        <h2 className={styles.msg}>View Your <span>Supply</span> Today</h2>
 
         <h3>Quick Stats</h3>
 
