@@ -64,7 +64,7 @@ const LogInForm = ({ login }) => {
             </form>
             <hr />
             <p className="signUpText">
-                Don't have an account? <Link to="/signup">Sign up here</Link>
+                Don't have an account? <Link className="link"to="/signup">Sign up here</Link>
             </p>
         </div>
     );
