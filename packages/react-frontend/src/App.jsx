@@ -6,6 +6,7 @@ import LogIn from './pages/LogIn';
 import About from "./pages/About";
 import Account from "./pages/Account";
 import SignUp from "./pages/SignUp";
+import Catalog from "./pages/Catalog";
 
 
 const App = () => {
@@ -29,6 +30,10 @@ const App = () => {
         {/* login route */}
         <Route path="/login" element={<LogIn handleAuth={handleAuth} />} />
 
+        {/* signup route */}
+        <Route path="/signup" element={<SignUp verifySignUp={verifySignUp}/>} />
+
+        {/* paths that need authentication */}
         <Route
           path="/home"
           element={
@@ -51,9 +56,12 @@ const App = () => {
         />
 
         <Route
-          path="/signup"
-          element={<SignUp verifySignUp={verifySignUp}/>}
+          path="/catalog"
+          element={
+            isAuthenticated ? (<Catalog />) : (<Navigate to="/login" replace />)
+          }
         />
+
       </Routes>
     </Router>
     
