@@ -2,7 +2,6 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import SignUpForm from "./SignUpForm";
 import styles from "./LogIn.module.css";
-import "../assets/styles/index.css";
 
 const SignUp = ({verifySignUp}) => {
     const navigate = useNavigate();
