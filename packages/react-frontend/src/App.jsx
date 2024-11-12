@@ -5,14 +5,19 @@ import Home from './pages/Home';
 import LogIn from './pages/LogIn';
 import About from "./pages/About";
 import Account from "./pages/Account";
+import SignUp from "./pages/SignUp";
 
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   const handleAuth = () => {
-    console.log("Authentication successful")
+    console.log("Authentication successful");
     setIsAuthenticated(true);
+  }
+
+  const verifySignUp = (userData) => {
+    console.log("not implemented yet");
   }
 
   return (
@@ -43,6 +48,11 @@ const App = () => {
           element={
             isAuthenticated ? (<Account />) : (<Navigate to="/login" replace />)
           }
+        />
+
+        <Route
+          path="/signup"
+          element={<SignUp verifySignUp={verifySignUp}/>}
         />
       </Routes>
     </Router>
