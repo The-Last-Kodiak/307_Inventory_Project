@@ -1,6 +1,6 @@
 // src/pages/LogInForm.jsx
 import React, { useState } from "react";
-import "./LogIn.module.css";
+import styles from "./LogIn.module.css";
 
 const LogInForm = ({ login }) => {
     // reset form upon load
@@ -30,29 +30,36 @@ const LogInForm = ({ login }) => {
     }
 
     return (
-        <div className="auth-form">
+        <div className={styles.authform}>
+            <h2>Log In</h2>
             <form>
-                <label htmlFor="username">Username</label>
-                <input 
-                    type="text"
-                    name="username"
-                    id="username"
-                    value={user.username}
-                    onChange={handleChange}
-                />
-                <label htmlFor="password">Password</label>
-                <input 
-                    type="password"
-                    name="password"
-                    id="password"
-                    value={user.password}
-                    onChange={handleChange}
-                />
-                <input
-                    type="button"
-                    value="Submit"
-                    onClick={submitForm}
-                />
+                <div className={styles.formgroup}>
+                    <label htmlFor="username">Username</label>
+                    <input 
+                        type="text"
+                        name="username"
+                        id="username"
+                        value={user.username}
+                        onChange={handleChange}
+                    />
+                </div>
+                <div className={styles.formgroup}>
+                    <label htmlFor="password">Password</label>
+                    <input 
+                        type="password"
+                        name="password"
+                        id="password"
+                        value={user.password}
+                        onChange={handleChange}
+                    />
+                </div>
+                <div className={styles.formgroup}>
+                    <button
+                        className="btn"
+                        type="submit"
+                        onClick={submitForm}
+                    >Log In</button>
+                </div>
             </form>
         </div>
     );
