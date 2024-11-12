@@ -23,11 +23,17 @@ h1, h2, h3, h4, h5, h6 {
     font-weight: bold;
 }
 
-a {
+.link {
     text-decoration: none;
+    color: inherit;
 }
 
-h1 span {
+.link:hover {
+    color: var(--primary);
+    text-decoration: underline;
+}
+
+h1 span,p span {
     color: var(--primary);
 }
 
@@ -47,4 +53,36 @@ h1 span {
 .btn:hover{
     background: var(--primary);
     color: var(--text);
+}
+
+.flex-columns .row{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
+}
+
+.flex-columns .column{
+    display: flex;
+    flex-direction: column;
+    flex-basis: 100%;
+    flex: 1;
+}
+
+.flex-columns .column .infoColumn,
+.flex-columns .column .graphicColumn{
+    height: 100%;
+}
+
+.flex-columns .infoColumn{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 30px;
+}
+
+.flex-columns .infoColumn p{
+    font-size: 24px;
+    max-width: 400px;
 }
