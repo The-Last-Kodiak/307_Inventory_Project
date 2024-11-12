@@ -3,7 +3,7 @@ import styles from "./ProductCard.module.css";
 
 const ProductCard = ({ img, name }) => {
   return (
-    <div className="card">
+    <div className={styles.card}>
       <div className={styles.productView}>
         <img src={img} alt={name} />
         <h5 className={styles.productName}>{name}</h5>
