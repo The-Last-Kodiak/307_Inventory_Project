@@ -1,6 +1,7 @@
 // src/pages/LogInForm.jsx
 import React, { useState } from "react";
 import styles from "./LogIn.module.css";
+import { Link } from 'react-router-dom';
 
 const LogInForm = ({ login }) => {
     // reset form upon load
@@ -61,6 +62,10 @@ const LogInForm = ({ login }) => {
                     >Log In</button>
                 </div>
             </form>
+            <hr />
+            <p className="signUpText">
+                Don't have an account? <Link to="/signup">Sign up here</Link>
+            </p>
         </div>
     );
 }
