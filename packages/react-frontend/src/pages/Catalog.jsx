@@ -12,16 +12,18 @@ const Catalog = ({ productData }) => {
         setViewMode(mode);
     }
     return (
-        <div className="container">
+        <div >
             <Navbar/>
-            <div>
-                {/* add button for adding products */}
-                {/* add bar for filtering */}
-                <button onClick={() => toggleView('table')}>Table View</button>
-                <button onClick={() => toggleView('card')}>Card View</button>
-            </div>
-            <div>
-                {viewMode === 'table' ? ( <TableView productData={productData} /> ) : ( <CardView /> )}
+            <div className={styles.container}>
+                <div className={styles.filterbar}>
+                    {/* add button for adding products */}
+                    {/* add bar for filtering */}
+                    <button className={`btn ${styles.viewBtn}`} onClick={() => toggleView('table')}>Table View</button>
+                    <button className={`btn ${styles.viewBtn}`} onClick={() => toggleView('card')}>Card View</button>
+                </div>
+                <div>
+                    {viewMode === 'table' ? ( <TableView productData={productData} /> ) : ( <CardView /> )}
+                </div>
             </div>
         </div>
     );
