@@ -1,5 +1,5 @@
 // src/pages/App.jsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Home from './pages/Home';
 import LogIn from './pages/LogIn';
@@ -11,6 +11,7 @@ import Catalog from "./pages/Catalog";
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const[products, setProducts] = useState([]);
 
   const handleAuth = () => {
     console.log("Authentication successful");
@@ -21,6 +22,20 @@ const App = () => {
     console.log("not implemented yet");
   }
 
+  const fetchProducts = async () => {
+    try{
+      const response = await fetch("http:localhost:8000/products");
+      const data = await response.json();
+      setProducts(data.products_list);
+    } catch (error) {
+      console.log("Error fetching products:", error);
+    }
+  }
+
+  useEffect(() => {
+    fetchProducts();
+  }, [] );
+  
   return (
     <Router>
       <Routes>
@@ -58,7 +73,7 @@ const App = () => {
         <Route
           path="/catalog"
           element={
-            isAuthenticated ? (<Catalog />) : (<Navigate to="/login" replace />)
+            isAuthenticated ? (<Catalog removeProduct={removeProduct}/>) : (<Navigate to="/login" replace />)
           }
         />
 
