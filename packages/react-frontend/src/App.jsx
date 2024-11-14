@@ -21,6 +21,33 @@ const App = () => {
   const verifySignUp = (userData) => {
     console.log("not implemented yet");
   }
+  
+  const removeProduct = async (sku) => {
+    try {
+      const productToDelete = products.find(product => product.sku === sku);
+      const res = await fetch(`http://localhost:8000/products/${productToDelete._id}`, {
+        method: "DELETE",
+      });
+
+      if ( res.status === 204 ) {
+        const updatedProducts = products.filter(product => product.sku !== sku);
+        setProducts(updatedProducts);
+      } else {
+        throw new Error("Failed to delete product");
+      }
+    } catch {
+      console.log("Error deleting product:", error);
+    }
+  }
+
+const updateList = async (product) => {
+    try {
+      const newProduct = await postProduct(product);
+      setProducts([...products, newProduct]);
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   const fetchProducts = async () => {
     try{
