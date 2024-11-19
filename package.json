@@ -1,11 +1,12 @@
 {
-  "name": "csc_307",
+  "name": "307_inventory_project",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
+    "test": "echo \"No test cases specified\" && exit 0",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -13,16 +14,18 @@
     "react-dom": "^18.3.1"
   },
   "devDependencies": {
-    "@eslint/js": "^9.9.0",
+    "@eslint/js": "^9.15.0",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
     "@vitejs/plugin-react": "^4.3.1",
-    "eslint": "^9.9.0",
-    "eslint-plugin-react": "^7.35.0",
+    "eslint": "^9.15.0",
+    "eslint-plugin-react": "^7.37.2",
     "eslint-plugin-react-hooks": "^5.1.0-rc.0",
-    "eslint-plugin-react-refresh": "^0.4.9",
-    "globals": "^15.9.0",
+    "eslint-plugin-react-refresh": "^0.4.14",
+    "globals": "^15.12.0",
+    "jest": "^29.7.0",
     "nodemon": "^3.1.7",
+    "prettier": "^3.3.3",
     "vite": "^5.4.1"
   },
   "author": "",
