@@ -3,4 +3,38 @@
     max-width: 500px;
     margin: 30px auto;
     padding: 30px;
+
+    text-align: center;
+}
+
+.container h1{
+    margin: 20px 0;
+    font-size: 50px;
+    font-weight: 300;
+}
+
+.authform {
+    background: var(--secondary);
+    padding: 30px 20px;
+    border-radius: 10px;
+}
+
+.formgroup {
+    margin: 30px 20px;
+}
+
+.formgroup label{
+    display: block;
+    text-align: left;
+}
+
+.formgroup input{
+    width: 100%;
+    padding: 10px;
+    border: #aaa 1px solid;
+    border-radius: 5px;
+}
+
+hr {
+    color: #aaa;
 }
