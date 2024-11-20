@@ -34,8 +34,8 @@ async function getUser(credentials) {
        return null;
     }
 
-
-    if (credentials.password == user.password) {
+    const is_match = await bcrypt.compare(credentials.password, user.password);
+    if (is_match) {
         return user;
     }
     else {
