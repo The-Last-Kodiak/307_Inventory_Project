@@ -1,9 +1,12 @@
 import express from "express";
+import bcrypt from "bcrypt";
 import db from "./dbFunctions.js";
 const app = express();
 const port = 8000;
 
 app.use(express.json());
+
+
 
 app.get("/", (req, res) => {
     res.send("Put Something Here");
@@ -52,6 +55,7 @@ app.post("/signup", (req, res) => {
             }
         }
 
+
         //adds user to database
         let promise = db.addUser(account);
         promise.then((newUser) => { res.status(201).send(newUser); })
@@ -61,7 +65,7 @@ app.post("/signup", (req, res) => {
             });
 
         //returns account info added
-        res.send(account);
+        res.send(account_to_add);
     })
     .catch((error) => {
         console.log(error);

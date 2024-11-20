@@ -1,7 +1,9 @@
 import mongoose from "mongoose";
 import Models from "./databaseSchema.js";
+import bcrypt from "bcrypt";
 
 mongoose.set("debug", true);
+const SALT_ROUNDS = 10;
 
 mongoose
     .connect("mongodb://127.0.0.1:27017/databaseSchema", {
@@ -15,22 +17,35 @@ function getUsers() {
     return promise;
 }
 
-function addUser(user) {
+async function addUser(user) {
+    const hashedPassword = await bcrypt.hash(user.password, SALT_ROUNDS);
+    user.password = hashedPassword;
     const userToAdd = new Models.User(user);
     const promise = userToAdd.save();
     return promise;
 }
 
 
-//internal fuction to get a user 
-function getUser(credentials) {
-    let query = {
-        "username": credentials.username,
-        "password": credentials.password,
-    };
+//internal fuction to get a user
+async function getUser(credentials) {
 
-    const search = Models.User.find(query);
-    return search;
+    const user = await Models.User.findOne({ username: credentials.username});
+    if (!user) {
+       return null;
+    }
+
+    const is_match = await bcrypt.compare(credentials.password, user.password);
+    if (is_match) {
+        return user;
+    }
+    else {
+        return null;
+    }
+
+
+
+
+
 }
 
 function addProduct(product) {
