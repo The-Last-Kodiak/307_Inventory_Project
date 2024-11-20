@@ -40,7 +40,7 @@ function addProduct(product) {
 }
 
 function getProducts(user) {
-    let promise = Models.Inventory.find({"username": user.username});
+    let promise = Models.Inventory.find({ "username": user.username }, {"_id": 0, "__v": 0, "username": 0});
     return promise;
 }
 
