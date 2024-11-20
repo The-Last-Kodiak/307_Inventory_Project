@@ -232,7 +232,6 @@ app.delete("/inventory", (req, res) => {
 
 //lets server know that we are listening for a request
 app.listen(port, () => {
-    console.log(
-        `Currently listening`
-    );
+    console.log(`Currently listening`);
+    console.log(`Server is running at http://localhost:${port}`);
 });
