@@ -1,14 +1,22 @@
 import mongoose from "mongoose";
 import Models from "./databaseSchema.js";
+require('dotenv').config();
 
 mongoose.set("debug", true);
 
 mongoose
-    .connect("mongodb://127.0.0.1:27017/databaseSchema", {
+    .connect(process.env.MONGODB_URI, {
         useNewUrlParser: true,
         useUnifiedTopology: true,
     })
     .catch((error) => console.log(error));
+
+// mongoose
+//     .connect("mongodb://127.0.0.1:27017/databaseSchema", {
+//         useNewUrlParser: true,
+//         useUnifiedTopology: true,
+//     })
+//     .catch((error) => console.log(error));
 
 function getUsers() {
     const promise = Models.User.find();

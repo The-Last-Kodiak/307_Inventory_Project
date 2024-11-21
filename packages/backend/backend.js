@@ -1,7 +1,18 @@
 import express from "express";
 import db from "./dbFunctions.js";
+require('dotenv').config();
 const app = express();
 const port = 8000;
+// const { MongoClient } = require('mongodb');
+// const uri = process.env.MONGODB_URI;
+// const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+// async function connectDB() {
+//     await client.connect();
+//     const db = client.db('your-database-name');
+//     return db;
+// }
+// module.exports = { connectDB };
+
 
 app.use(express.json());
 
