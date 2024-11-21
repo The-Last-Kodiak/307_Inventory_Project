@@ -1,6 +1,6 @@
 import express from "express";
 import db from "./dbFunctions.js";
-require('dotenv').config();
+
 const app = express();
 const port = 8000;
 // const { MongoClient } = require('mongodb');
@@ -241,8 +241,6 @@ app.delete("/inventory", (req, res) => {
 });
 
 
-//lets server know that we are listening for a request
-app.listen(port, () => {
-    console.log(`Currently listening`);
-    console.log(`Server is running at http://localhost:${port}`);
-});
+app.listen(process.env.PORT || port, () => {
+    console.log("REST API is listening.");
+  });
