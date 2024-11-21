@@ -1,5 +1,6 @@
 ### 307_Inventory_Project
 
+https://307inventoryproject-a0f3f8g3dhcedrek.westus3-01.azurewebsites.net/
 
 ## Contributing
 
