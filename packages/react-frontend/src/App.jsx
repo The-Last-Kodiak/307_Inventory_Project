@@ -4,7 +4,6 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import Home from './pages/Home';
 import LogIn from './pages/LogIn';
 import About from "./pages/About";
-import Account from "./pages/Account";
 import SignUp from "./pages/SignUp";
 import Catalog from "./pages/Catalog";
 
@@ -83,13 +82,6 @@ const App = () => {
           path="/about"
           element={
             isAuthenticated ? (<About />) : (<Navigate to="/login" replace />)
-          }
-        />
-
-        <Route
-          path="/account"
-          element={
-            isAuthenticated ? (<Account />) : (<Navigate to="/login" replace />)
           }
         />
 
