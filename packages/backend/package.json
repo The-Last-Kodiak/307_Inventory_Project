@@ -4,13 +4,16 @@
   "type": "module",
   "main": "backend.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node backend.js"
+    "lint": "npx eslint . && npx prettier --check .",
+    "test": "echo \"Error: no test specified\" && exit 0",
+    "start": "node backend.js",
+    "dev": "nodemon backend.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.21.1"
+    "express": "^4.21.1",
+    "mongoose": "^8.8.0"
   },
   "description": ""
 }

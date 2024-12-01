@@ -1,7 +1,18 @@
 import express from "express";
 import db from "./dbFunctions.js";
+
 const app = express();
 const port = 8000;
+// const { MongoClient } = require('mongodb');
+// const uri = process.env.MONGODB_URI;
+// const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+// async function connectDB() {
+//     await client.connect();
+//     const db = client.db('your-database-name');
+//     return db;
+// }
+// module.exports = { connectDB };
+
 
 app.use(express.json());
 
@@ -90,7 +101,7 @@ app.post("/inventory", (req, res) => {
         "password": req.body[0].password,
         "product_name": req.body[0].product_name,
         "price": req.body[0].price,
-        "quantity": 0,
+        "quantity": quantity,
         "supplier": req.body[0].supplier,
         "description": req.body[0].description,
     };
@@ -107,13 +118,17 @@ app.post("/inventory", (req, res) => {
 
     //after succesful login, checks if it is vaild and then adds the product if it is
     login.then((u) => {
-            if (u.length == 1) {
+        if (u.length == 1) {
+
+                //where the product is added
                 let promise = db.addProduct(product);
                 promise.then((newProduct) => { res.status(201).send(newProduct); })
                     .catch((error) => {
                         console.log(error);
                         res.status(400).send("product_name, price, quantity, supplier or description fields aren't filled");
                     });
+                //
+
             } else if (u.length > 1) {
                 console.log(u);
                 throw new Error("There are duplicate accounts");
@@ -156,6 +171,8 @@ app.get("/inventory", (req, res) => {
                     console.log(error);
                     res.status(500).send("Internal Server Error")
                 });
+            //
+
         } else if (u.length > 1) {
             console.log(u);
             throw new Error("There are duplicate accounts");
@@ -209,6 +226,8 @@ app.delete("/inventory", (req, res) => {
                     console.log(error);
                     res.status(500).send();
                 });
+            //
+
         } else if (u.length > 1) {
             console.log(u);
             throw new Error("There are duplicate accounts");
@@ -222,9 +241,6 @@ app.delete("/inventory", (req, res) => {
 });
 
 
-//lets server know that we are listening for a request
-app.listen(port, () => {
-    console.log(
-        `Currently listening`
-    );
-});
+app.listen(process.env.PORT || port, () => {
+    console.log("REST API is listening.");
+  });
