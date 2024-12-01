@@ -20,14 +20,10 @@ const LogInForm = ({ login }) => {
     }
 
     // check login credentials here
-    const submitForm = () =>{
+    const submitForm = (event) =>{
         // login credentials hardcoded for testing
-        if (user.username === "test" && user.password === "password") {
-            login(user);
-            setUser({password: ""});
-        } else {
-            alert("Invalid credentials");
-        }
+        event.preventDefault();
+        login(user);
     }
 
     return (
