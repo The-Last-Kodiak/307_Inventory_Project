@@ -7,6 +7,8 @@ import dotenv from 'dotenv';
 dotenv.config();
 const app = express();
 const port = 8000;
+app.use(cors(corsOptions));
+app.use(express.json());
 // whitelist frontend domain
 const validOrigins = process.env.VALID_ORIGINS ? process.env.VALID_ORIGINS.split(',') : [];
 
@@ -22,7 +24,6 @@ const corsOptions = {
     },
     credentials: true,
 }
-app.use(cors(corsOptions));
 
 // const { MongoClient } = require('mongodb');
 // const uri = process.env.MONGODB_URI;
