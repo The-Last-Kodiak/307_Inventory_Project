@@ -1,8 +1,29 @@
+// backend.js
 import express from "express";
 import db from "./dbFunctions.js";
+import cors from "cors";
+import dotenv from 'dotenv';
 
+dotenv.config();
 const app = express();
 const port = 8000;
+// whitelist frontend domain
+const validOrigins = process.env.VALID_ORIGINS ? process.env.VALID_ORIGINS.split(',') : [];
+
+// set rules for cors
+const corsOptions = {
+    // specifies which domains are allowed to access backend
+    origin: (origin, callback) => {
+        if (validOrigins.includes(origin) || !origin) {
+            callback(null, true);
+        } else {
+            callback(new Error("Not allowed by CORS"));
+        }
+    },
+    credentials: true,
+}
+app.use(cors(corsOptions));
+
 // const { MongoClient } = require('mongodb');
 // const uri = process.env.MONGODB_URI;
 // const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
