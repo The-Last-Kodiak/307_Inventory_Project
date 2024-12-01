@@ -56,7 +56,7 @@ const LogInForm = ({ login }) => {
                 </div>
                 <div className={styles.formgroup}>
                     <button
-                        className="btn"
+                        className={`btn ${styles.btn}`}
                         type="submit"
                         onClick={submitForm}
                     >Log In</button>

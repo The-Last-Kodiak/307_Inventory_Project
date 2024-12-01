@@ -43,11 +43,8 @@ h1 span,h2 span,p span {
     color: var(--background);
     padding: 15px 10px;
     display: inline-block;
-    font-size: 18px;
     border: none;
     cursor: pointer;
-    width: 100%;
-    margin-top: 15px;
     border-radius: 5px;
 }
 

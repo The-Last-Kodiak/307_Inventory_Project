@@ -76,7 +76,7 @@ const SignUpForm = ({signup}) => {
                 </div>
                 <div className={styles.formgroup}>
                     <button
-                        className="btn"
+                        className={`btn ${styles.btn}`}
                         type="submit"
                         onClick={submitForm}
                     >Sign Up</button>
