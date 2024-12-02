@@ -123,6 +123,7 @@ app.post("/inventory", (req, res) => {
         "quantity": quantity,
         "supplier": req.body[0].supplier,
         "description": req.body[0].description,
+        "sku": req.body[0].sku,
     };
 
 
@@ -144,7 +145,7 @@ app.post("/inventory", (req, res) => {
                 promise.then((newProduct) => { res.status(201).send(newProduct); })
                     .catch((error) => {
                         console.log(error);
-                        res.status(400).send("product_name, price, quantity, supplier or description fields aren't filled");
+                        res.status(400).send("product_name, price, quantity, supplier, description, or sku fields aren't filled");
                     });
                 //
 
@@ -224,6 +225,7 @@ app.delete("/inventory", (req, res) => {
         "quantity": quantity,
         "supplier": req.body[0].supplier,
         "description": req.body[0].description,
+        "sku": req.body[0].sku,
     };
 
     //searches for user given the username and password
