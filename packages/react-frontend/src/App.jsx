@@ -61,11 +61,11 @@ const App = () => {
       password: userData.password,
     });
     setIsAuthenticated(true);
-  }
+  };
 
   const verifySignUp = (userData) => {
     console.log("not implemented yet");
-  }
+  };
   
 //   const removeProduct = async (sku) => {
 //     try {

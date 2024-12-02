@@ -32,7 +32,7 @@ const LogIn = ({ onLogin }) => {
         setUsername(userData.username);
         setPassword(userData.password);
         handleAuth();
-    }
+    };
 
     return (
     <div className={`container ${styles.container}`}>

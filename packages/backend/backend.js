@@ -35,9 +35,6 @@ const corsOptions = {
 // }
 // module.exports = { connectDB };
 
-
-app.use(express.json());
-
 app.get("/", (req, res) => {
     res.send("Put Something Here");
 });

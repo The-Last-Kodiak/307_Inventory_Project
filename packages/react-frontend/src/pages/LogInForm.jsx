@@ -17,14 +17,14 @@ const LogInForm = ({ login }) => {
             ...prevUser,
             [name]: value
         }));
-    }
+    };
 
     // check login credentials here
     const submitForm = (event) =>{
         // login credentials hardcoded for testing
         event.preventDefault();
         login(user);
-    }
+    };
 
     return (
         <div className={styles.authform}>
@@ -38,6 +38,7 @@ const LogInForm = ({ login }) => {
                         id="username"
                         value={user.username}
                         onChange={handleChange}
+                        required
                     />
                 </div>
                 <div className={styles.formgroup}>
@@ -48,6 +49,7 @@ const LogInForm = ({ login }) => {
                         id="password"
                         value={user.password}
                         onChange={handleChange}
+                        required
                     />
                 </div>
                 <div className={styles.formgroup}>

@@ -13,7 +13,7 @@ const Catalog = () => {
     useEffect(() => {
         const fetchProducts = async () => {
             try {
-                const res = await fetch('https://307inventoryproject-a0f3f8g3dhcedrek.westus3-01.azurewebsites.net/inventory');
+                const res = await fetch(`https://307inventoryproject-a0f3f8g3dhcedrek.westus3-01.azurewebsites.net/inventory?username=${username}&password=${password}`);
                 if (!res.ok) {
                     throw new Error ('Failed to fetch products');
                 }
@@ -29,7 +29,8 @@ const Catalog = () => {
 
     const toggleView = (mode) =>{
         setViewMode(mode);
-    }
+    };
+
     return (
         <div >
             <Navbar/>
@@ -40,6 +41,7 @@ const Catalog = () => {
                     <button className={`btn ${styles.viewBtn}`} onClick={() => toggleView('table')}>Table View</button>
                     <button className={`btn ${styles.viewBtn}`} onClick={() => toggleView('card')}>Card View</button>
                 </div>
+
                 <div>
                     {viewMode === 'table' ? ( <TableView productData={productData} /> ) : ( <CardView /> )}
                 </div>
