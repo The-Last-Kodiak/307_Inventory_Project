@@ -29,6 +29,7 @@ module.exports = [
       'quotes': ['error', 'double'],
       'no-unused-vars': 'warn',
       'react/jsx-no-target-blank': 'off',
+      'react/jsx-uses-react': 'off',
       'react-refresh/only-export-components': [
         'warn',
         { allowConstantExport: true },
@@ -37,6 +38,9 @@ module.exports = [
       ...require('eslint-plugin-react').configs.recommended.rules,
       ...require('eslint-plugin-react').configs['jsx-runtime'].rules,
       ...require('eslint-plugin-react-hooks').configs.recommended.rules,
+    },
+    extends: {
+      plugin:'react/recommended'
     },
   },
 ];
