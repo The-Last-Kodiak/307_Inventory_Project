@@ -1,8 +1,11 @@
 import React from "react";
+// import styles from "./CardView.module.css";
 
 const CardView = () => {
     return (
-        <h1>CardView</h1>
+        <div className={styles.container}>
+            
+        </div>
     );
 };
 

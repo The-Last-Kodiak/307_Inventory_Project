@@ -1,8 +1,30 @@
+// backend.js
 import express from "express";
 import db from "./dbFunctions.js";
+import cors from "cors";
+import dotenv from 'dotenv';
 
+dotenv.config();
 const app = express();
 const port = 8000;
+app.use(cors(corsOptions));
+app.use(express.json());
+// whitelist frontend domain
+const validOrigins = process.env.VALID_ORIGINS ? process.env.VALID_ORIGINS.split(',') : [];
+
+// set rules for cors
+const corsOptions = {
+    // specifies which domains are allowed to access backend
+    origin: (origin, callback) => {
+        if (validOrigins.includes(origin) || !origin) {
+            callback(null, true);
+        } else {
+            callback(new Error("Not allowed by CORS"));
+        }
+    },
+    credentials: true,
+}
+
 // const { MongoClient } = require('mongodb');
 // const uri = process.env.MONGODB_URI;
 // const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
@@ -12,9 +34,6 @@ const port = 8000;
 //     return db;
 // }
 // module.exports = { connectDB };
-
-
-app.use(express.json());
 
 app.get("/", (req, res) => {
     res.send("Put Something Here");
@@ -104,6 +123,7 @@ app.post("/inventory", (req, res) => {
         "quantity": quantity,
         "supplier": req.body[0].supplier,
         "description": req.body[0].description,
+        "sku": req.body[0].sku,
     };
 
 
@@ -125,7 +145,7 @@ app.post("/inventory", (req, res) => {
                 promise.then((newProduct) => { res.status(201).send(newProduct); })
                     .catch((error) => {
                         console.log(error);
-                        res.status(400).send("product_name, price, quantity, supplier or description fields aren't filled");
+                        res.status(400).send("product_name, price, quantity, supplier, description, or sku fields aren't filled");
                     });
                 //
 
@@ -205,6 +225,7 @@ app.delete("/inventory", (req, res) => {
         "quantity": quantity,
         "supplier": req.body[0].supplier,
         "description": req.body[0].description,
+        "sku": req.body[0].sku,
     };
 
     //searches for user given the username and password

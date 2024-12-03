@@ -17,18 +17,14 @@ const LogInForm = ({ login }) => {
             ...prevUser,
             [name]: value
         }));
-    }
+    };
 
     // check login credentials here
-    const submitForm = () =>{
+    const submitForm = (event) =>{
         // login credentials hardcoded for testing
-        if (user.username === "test" && user.password === "password") {
-            login(user);
-            setUser({password: ""});
-        } else {
-            alert("Invalid credentials");
-        }
-    }
+        event.preventDefault();
+        login(user);
+    };
 
     return (
         <div className={styles.authform}>
@@ -42,6 +38,7 @@ const LogInForm = ({ login }) => {
                         id="username"
                         value={user.username}
                         onChange={handleChange}
+                        required
                     />
                 </div>
                 <div className={styles.formgroup}>
@@ -52,11 +49,12 @@ const LogInForm = ({ login }) => {
                         id="password"
                         value={user.password}
                         onChange={handleChange}
+                        required
                     />
                 </div>
                 <div className={styles.formgroup}>
                     <button
-                        className="btn"
+                        className={`btn ${styles.btn}`}
                         type="submit"
                         onClick={submitForm}
                     >Log In</button>

@@ -1,9 +1,10 @@
 import React from "react";
+import styles from "./Catalog.module.css"
 
 const TableView = ({ productData }) => {
     const TableHeader = () => {
         return (
-            <thead>
+            <thead className={styles.thead}>
                 <tr>
                     <th>SKU</th>
                     <th>Product Name</th>
@@ -24,11 +25,13 @@ const TableView = ({ productData }) => {
                         <td>{row.price}</td>
                         <td>{row.qty}</td>
                         <td>
-                            <button>View</button>
-                            <button>Flag</button>
-                            {/* <button onClick={() => removeProduct(sku)}>
-                                Delete
-                            </button> */}
+                            <div className={styles.btnContainer}>
+                                <button className={`btn ${styles.btn}`}>View</button>
+                                <button className={`btn ${styles.btn}`}>Flag</button>
+                                {/* <button onClick={() => removeProduct(sku)}>
+                                    Delete
+                                </button> */}
+                            </div>
                         </td>
                     </tr>
                 ))}
@@ -36,7 +39,7 @@ const TableView = ({ productData }) => {
         )
     }
     return (
-        <table>
+        <table className={styles.table}>
             <TableHeader/>
             <TableBody/>
         </table>
