@@ -21,7 +21,6 @@ const LogInForm = ({ login }) => {
 
     // check login credentials here
     const submitForm = (event) =>{
-        // login credentials hardcoded for testing
         event.preventDefault();
         login(user);
     };
@@ -62,7 +61,7 @@ const LogInForm = ({ login }) => {
             </form>
             <hr />
             <p className="signUpText">
-                Don't have an account? <Link className="link"to="/signup">Sign up here</Link>
+                Don&apos;t have an account? <Link className="link"to="/signup">Sign up here</Link>
             </p>
         </div>
     );
