@@ -9,6 +9,7 @@ module.exports = [
       globals: {
         browser: true,
         es2021: true,
+        ...globals.node,
       },
       parserOptions: {
         ecmaVersion: 'latest',
