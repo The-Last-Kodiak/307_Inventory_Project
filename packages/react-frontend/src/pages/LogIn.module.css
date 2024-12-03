@@ -38,3 +38,9 @@
 hr {
     color: #aaa;
 }
+
+.btn{ 
+    width: 100%;
+    font-size: 18px;
+    margin: 15px 0;
+}
