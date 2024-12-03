@@ -1,6 +1,8 @@
 import mongoose from "mongoose";
 import Models from "./databaseSchema.js";
 import dotenv from "dotenv";
+import bcrypt from "bcrypt";
+const SALT_ROUNDS = 10;
 
 dotenv.config();
 
@@ -26,6 +28,8 @@ function getUsers() {
 }
 
 function addUser(user) {
+  const hashedPassword = await bcrypt.hash(user.password, SALT_ROUNDS);
+  user.password = hashedPassword;
   const userToAdd = new Models.User(user);
   const promise = userToAdd.save();
   return promise;
@@ -33,13 +37,18 @@ function addUser(user) {
 
 //internal fuction to get a user
 function getUser(credentials) {
-  let query = {
-    username: credentials.username,
-    password: credentials.password,
-  };
+  const user = await Models.User.findOne({ username: credentials.username});
+  if (!user) {
+     return null;
+  }
 
-  const search = Models.User.find(query);
-  return search;
+  const is_match = await bcrypt.compare(credentials.password, user.password);
+  if (is_match) {
+      return user;
+  }
+  else {
+      return null;
+  }
 }
 
 function addProduct(product) {
