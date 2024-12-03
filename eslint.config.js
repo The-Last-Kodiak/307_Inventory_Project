@@ -1,3 +1,4 @@
+const globals = require('globals');
 module.exports = [
   { 
     ignores: ['dist'] 
@@ -9,6 +10,7 @@ module.exports = [
       globals: {
         browser: true,
         es2021: true,
+        ...globals.node,
       },
       parserOptions: {
         ecmaVersion: 'latest',
@@ -27,6 +29,7 @@ module.exports = [
       'quotes': ['error', 'double'],
       'no-unused-vars': 'warn',
       'react/jsx-no-target-blank': 'off',
+      'react/jsx-uses-react': 'off',
       'react-refresh/only-export-components': [
         'warn',
         { allowConstantExport: true },
