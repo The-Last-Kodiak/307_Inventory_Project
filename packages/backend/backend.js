@@ -25,7 +25,7 @@ const corsOptions = {
   },
   credentials: true,
 };
-app.use(cors(corsOptions));
+app.use(cors());
 
 // const { MongoClient } = require('mongodb');
 // const uri = process.env.MONGODB_URI;
