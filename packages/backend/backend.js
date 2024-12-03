@@ -2,15 +2,14 @@
 import express from "express";
 import db from "./dbFunctions.js";
 import cors from "cors";
-import dotenv from 'dotenv';
+import dotenv from "dotenv";
 
 dotenv.config();
 const app = express();
 const port = 8000;
-app.use(cors(corsOptions));
 app.use(express.json());
 // whitelist frontend domain
-const validOrigins = process.env.VALID_ORIGINS ? process.env.VALID_ORIGINS.split(',') : [];
+const validOrigins = process.env.VALID_ORIGINS ? process.env.VALID_ORIGINS.split(",") : [];
 
 // set rules for cors
 const corsOptions = {
@@ -23,7 +22,8 @@ const corsOptions = {
         }
     },
     credentials: true,
-}
+};
+app.use(cors(corsOptions));
 
 // const { MongoClient } = require('mongodb');
 // const uri = process.env.MONGODB_URI;
@@ -168,7 +168,7 @@ app.get("/inventory", (req, res) => {
     const user = {
         "username": req.query.username,
         "password": req.query.password,
-    }
+    };
 
 
     //searches for user given the username and password
@@ -189,7 +189,7 @@ app.get("/inventory", (req, res) => {
             inventory.then((i) => { res.send(i) })
                 .catch((error) => {
                     console.log(error);
-                    res.status(500).send("Internal Server Error")
+                    res.status(500).send("Internal Server Error");
                 });
             //
 
@@ -210,9 +210,9 @@ app.delete("/inventory", (req, res) => {
     //checks if quantity was given and sets it
     let quantity;
     if (req.body[0].quantity === undefined) {
-        quantity = 0
+        quantity = 0;
     } else {
-        quantity = req.body[0].quantity
+        quantity = req.body[0].quantity;
     }
 
 

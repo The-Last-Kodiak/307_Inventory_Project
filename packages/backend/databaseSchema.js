@@ -86,4 +86,4 @@ const Inventory = mongoose.model("Inventory", InventorySchema);
 export default {
     User,
     Inventory,
-}
+};

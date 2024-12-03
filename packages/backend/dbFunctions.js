@@ -1,6 +1,8 @@
 import mongoose from "mongoose";
 import Models from "./databaseSchema.js";
-require('dotenv').config();
+import dotenv from "dotenv";
+
+dotenv.config();
 
 mongoose.set("debug", true);
 
@@ -72,4 +74,4 @@ export default {
     addProduct,
     getProducts,
     deleteProduct,
-}
+};
