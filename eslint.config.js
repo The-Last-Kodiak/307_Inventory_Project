@@ -39,8 +39,5 @@ module.exports = [
       ...require('eslint-plugin-react').configs['jsx-runtime'].rules,
       ...require('eslint-plugin-react-hooks').configs.recommended.rules,
     },
-    extends: {
-      plugin:'react/recommended'
-    },
   },
 ];
