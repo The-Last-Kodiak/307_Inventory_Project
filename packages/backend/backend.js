@@ -108,9 +108,9 @@ app.post("/inventory", (req, res) => {
     //checks if quantity was given and sets it
     let quantity;
     if (req.body[0].quantity === undefined) {
-        quantity = 0
+        quantity = 0;
     } else {
-        quantity = req.body[0].quantity
+        quantity = req.body[0].quantity;
     }
 
 
@@ -186,7 +186,9 @@ app.get("/inventory", (req, res) => {
 
             //gets and returns the products ascosiated with the username
             let inventory = db.getProducts(user);
-            inventory.then((i) => { res.send(i) })
+            inventory.then((i) => {
+                    res.send(i); 
+                })
                 .catch((error) => {
                     console.log(error);
                     res.status(500).send("Internal Server Error");
