@@ -3,8 +3,8 @@ import React from "react";
 
 const CardView = () => {
     return (
-        <div className={styles.container}>
-            
+        <div>
+            <h1>Card View</h1>
         </div>
     );
 };
