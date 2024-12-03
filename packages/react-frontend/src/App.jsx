@@ -1,57 +1,19 @@
 // src/pages/App.jsx
-import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import Home from './pages/Home';
-import LogIn from './pages/LogIn';
+import React, { useState } from "react";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import Home from "./pages/Home";
+import LogIn from "./pages/LogIn";
 import About from "./pages/About";
 import SignUp from "./pages/SignUp";
 import Catalog from "./pages/Catalog";
 
 
 const App = () => {
-  // const [products, setProducts] = useState([
-  //   {
-  //     sku: 'PROD001',
-  //     name: 'Cal Poly Hoodie',
-  //     price: 49.99,
-  //     qty: 12,
-  //     _id: '1',
-  //   },
-  //   {
-  //     sku: 'PROD002',
-  //     name: 'Cal Poly Hat',
-  //     price: 19.99,
-  //     qty: 20,
-  //     _id: '2',
-  //   },
-  //   {
-  //     sku: 'PROD003',
-  //     name: 'Cal Poly T-Shirt',
-  //     price: 29.99,
-  //     qty: 15,
-  //     _id: '3',
-  //   },
-  //   {
-  //     sku: 'PROD004',
-  //     name: 'Cal Poly Mug',
-  //     price: 9.99,
-  //     qty: 50,
-  //     _id: '4',
-  //   },
-  //   {
-  //     sku: 'PROD005',
-  //     name: 'Cal Poly Keychain',
-  //     price: 4.99,
-  //     qty: 100,
-  //     _id: '5',
-  //   },
-  // ]);
-  
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   const [user, setUser] = useState({
-    username: '',
-    password: '',
+    username: "",
+    password: "",
   });
 
   const handleLogin = (userData) => {
@@ -66,47 +28,6 @@ const App = () => {
   const verifySignUp = (userData) => {
     console.log("not implemented yet");
   };
-  
-//   const removeProduct = async (sku) => {
-//     try {
-//       const productToDelete = products.find(product => product.sku === sku);
-//       const res = await fetch(`http://localhost:8000/products/${productToDelete._id}`, {
-//         method: "DELETE",
-//       });
-
-//       if ( res.status === 204 ) {
-//         const updatedProducts = products.filter(product => product.sku !== sku);
-//         setProducts(updatedProducts);
-//       } else {
-//         throw new Error("Failed to delete product");
-//       }
-//     } catch {
-//       console.log("Error deleting product:", error);
-//     }
-//   }
-
-// const updateList = async (product) => {
-//     try {
-//       const newProduct = await postProduct(product);
-//       setProducts([...products, newProduct]);
-//     } catch (error) {
-//       console.log(error);
-//     }
-//   }
-
-//   const fetchProducts = async () => {
-//     try{
-//       const response = await fetch("http:localhost:8000/products");
-//       const data = await response.json();
-//       setProducts(data.products_list);
-//     } catch (error) {
-//       console.log("Error fetching products:", error);
-//     }
-//   }
-
-//   useEffect(() => {
-//     fetchProducts();
-//   }, [] );
   
   return (
     <Router>
@@ -138,7 +59,7 @@ const App = () => {
         <Route
           path="/catalog"
           element={
-            isAuthenticated ? (<Catalog />) : (<Navigate to="/login" replace />)
+            isAuthenticated ? (<Catalog user={user}/>) : (<Navigate to="/login" replace />)
           }
         />
 
