@@ -1,9 +1,10 @@
 import mongoose from "mongoose";
 import Models from "./databaseSchema.js";
 import dotenv from "dotenv";
+import bcrypt from "bcrypt";
+const SALT_ROUNDS = 10;
 
 dotenv.config();
-
 mongoose.set("debug", true);
 
 mongoose
@@ -13,39 +14,57 @@ mongoose
   })
   .catch((error) => console.log(error));
 
-// mongoose
-//     .connect("mongodb://127.0.0.1:27017/databaseSchema", {
-//         useNewUrlParser: true,
-//         useUnifiedTopology: true,
-//     })
-//     .catch((error) => console.log(error));
+/*mongoose
+    .connect("mongodb://127.0.0.1:27017/databaseSchema", {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+    })
+    .catch((error) => console.log(error));*/
 
 function getUsers() {
   const promise = Models.User.find();
   return promise;
 }
 
-function addUser(user) {
+async function addUser(user) {
+  const hashedPassword = await bcrypt.hash(user.password, SALT_ROUNDS);
+  user.password = hashedPassword;
   const userToAdd = new Models.User(user);
   const promise = userToAdd.save();
   return promise;
 }
 
 //internal fuction to get a user
-function getUser(credentials) {
-  let query = {
-    username: credentials.username,
-    password: credentials.password,
-  };
+// res_handling parameter is a lambda function to handle logic after password comparision
+async function getUser(credentials, res_handling) {
+  const user = await Models.User.findOne({ username: credentials.username});
+  if (!user) {
+     return null;
+    }
 
-  const search = Models.User.find(query);
-  return search;
+    const res_promise = await bcrypt.compare(credentials.password, user.password, res_handling);
+    return res_promise
+
 }
 
 function addProduct(product) {
   const newProduct = new Models.Inventory(product);
   const promise = newProduct.save();
   return promise;
+}
+
+function updateProduct(product) {
+    const promise = Models.Inventory.findOneAndUpdate({
+        username: product.username,
+        product_name: product.product_name
+    }, {
+        product_name: product.product_name,
+        price: product.price,
+        quantity: product.quantity,
+        supplier: product.supplier,
+        description: product.description
+    })
+    return promise;
 }
 
 function getProducts(user) {
@@ -56,14 +75,21 @@ function getProducts(user) {
   return promise;
 }
 
+function getProduct(product){
+    let promise = Models.Inventory.find(
+        {
+            username: product.username,
+            product_name: product.product_name
+        },
+        { _id: 0, __v: 0, username: 0 },
+    );
+    return promise;
+}
+
 function deleteProduct(product) {
   let p = {
     username: product.username,
     product_name: product.product_name,
-    price: product.price,
-    quantity: product.quantity,
-    supplier: product.supplier,
-    description: product.description,
   };
   const promise = Models.Inventory.deleteOne(p);
   return promise;
@@ -74,6 +100,8 @@ export default {
   getUser,
   addUser,
   addProduct,
+  updateProduct,
+  getProduct,
   getProducts,
   deleteProduct,
 };
