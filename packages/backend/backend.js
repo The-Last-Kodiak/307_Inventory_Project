@@ -201,11 +201,10 @@ app.delete("/inventory", (req, res) => {
   };
 
   //searches for user given the username and password
-  let login;
   if (product.username === undefined || product.password === undefined) {
     return res.status(400).send("No username or passowrd");
   } else {
-      login = db.getUser(product, (err, password_res) => {
+      db.getUser(product, (err, password_res) => {
           if (password_res) {
 
               //deletes the product using all the parameters specified
@@ -241,11 +240,10 @@ app.put("/inventory", (req, res) => {
     };
 
     //searches for user given the username and password
-    let login;
     if (product.username === undefined || product.password === undefined) {
         return res.status(400).send("No username or passowrd");
     } else {
-        login = db.getUser(product, (err, password_res) => {
+        db.getUser(product, (err, password_res) => {
             if (password_res) {
 
                 //updates the product using all the parameters specified
