@@ -6,6 +6,7 @@ const SALT_ROUNDS = 10;
 
 dotenv.config();
 mongoose.set("debug", true);
+const SALT_ROUNDS = 10;
 
 mongoose
   .connect(process.env.MONGODB_URI, {

@@ -1,4 +1,5 @@
 import express from "express";
+import bcrypt from "bcrypt";
 import db from "./dbFunctions.js";
 import cors from "cors";
 import dotenv from "dotenv";
