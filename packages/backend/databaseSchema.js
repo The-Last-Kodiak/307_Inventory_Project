@@ -83,8 +83,14 @@ const InventorySchema = new mongoose.Schema(
     },
     description: {
       type: String,
-      required: true,
+        required: true,
+        trim: true,
     },
+    image_path: {
+        type: String,
+        required: false,
+        trim: true,
+    }
   },
   { collection: "inventory" },
 );
