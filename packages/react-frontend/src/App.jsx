@@ -7,7 +7,7 @@ import About from "./pages/About";
 import SignUp from "./pages/SignUp";
 import Catalog from "./pages/Catalog";
 
-
+// test
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
