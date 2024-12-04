@@ -1,3 +1,4 @@
+/* src/pages/Catalog.module.css */
 .container{
     margin: 10px auto;
     display: flex;
@@ -43,12 +44,6 @@
     padding: 20px;
 }
 
-.btnContainer{
-    display: flex;
-    gap: 10px;
-    justify-content: flex-start;
-}
-
 .btn{
     font-size: 16px;
 }
@@ -59,57 +54,97 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.5);
+    background: rgba(0, 0, 0, 0.8);
     display: flex;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
     z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
 }
 
+.overlay.show {
+    opacity: 1;
+    visibility: visible;
+}
 
-.overlayContent {
-    background: white;
-    padding: 20px;
-    border-radius: 8px;
-    width: 300px;
+.overlay-content {
+    background: var(--secondary); 
+    color: var(--text);
+    padding: 30px 20px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    max-width: 500px;
+    width: 90%;
     text-align: center;
 }
 
-
-.overlayContent h2 {
-    margin-bottom: 15px;
+.overlay h2 {
+    font-size: 30px;
+    margin-bottom: 20px;
+    color: var(--primary);
 }
 
-
-.overlayContent form {
+.overlay form {
     display: flex;
     flex-direction: column;
+    gap: 20px;
 }
 
-
-.overlayContent label {
-    margin-bottom: 10px;
+.overlay .formgroup {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
 }
 
+.overlay .formgroup label {
+    margin-bottom: 5px;
+    font-weight: bold;
+}
 
-.overlayContent input {
-    padding: 8px;
-    margin-bottom: 10px;
+.overlay .formgroup input {
     width: 100%;
-    border: 1px solid #ccc;
-}
-
-
-.overlayContent button {
     padding: 10px;
-    border: none;
-    background-color: #4CAF50;
-    color: white;
-    cursor: pointer;
-    margin-top: 10px;
+    border: 1px solid #aaa;
+    border-radius: 5px;
+    background: var(--background);
+    color: var(--text);
 }
 
+.overlay .formgroup input::placeholder {
+    color: #aaa; 
+}
 
-.overlayContent button[type="button"] {
-    background-color: #f44336;
+.overlay .btn {
+    background: var(--primary);
+    color: var(--text);
+    padding: 10px 15px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 5px;
+    border: none;
+    transition: background 0.3s;
+}
+
+.overlay .btn:hover {
+    background: var(--text);
+    color: var(--background);
+}
+
+.overlay .close-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: transparent;
+    border: none;
+    color: var(--text);
+    font-size: 24px;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+.overlay .close-btn:hover {
+    color: var(--primary);
 }
