@@ -2,7 +2,6 @@ import mongoose from "mongoose";
 import Models from "./databaseSchema.js";
 import dotenv from "dotenv";
 import bcrypt from "bcrypt";
-const SALT_ROUNDS = 10;
 
 dotenv.config();
 mongoose.set("debug", true);
@@ -44,7 +43,7 @@ async function getUser(credentials, res_handling) {
     }
 
     const res_promise = await bcrypt.compare(credentials.password, user.password, res_handling);
-    return res_promise
+    return res_promise;
 
 }
 
@@ -64,7 +63,7 @@ function updateProduct(product) {
         quantity: product.quantity,
         supplier: product.supplier,
         description: product.description
-    })
+    });
     return promise;
 }
 

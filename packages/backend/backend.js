@@ -1,9 +1,7 @@
 import express from "express";
-import bcrypt from "bcrypt";
 import db from "./dbFunctions.js";
 import cors from "cors";
 import dotenv from "dotenv";
-import dbFunctions from "./dbFunctions.js";
 
 dotenv.config();
 const app = express();
@@ -26,7 +24,7 @@ const corsOptions = {
   },
   credentials: true,
 };
-app.use(cors());
+app.use(cors(corsOptions));
 
 app.get("/", (req, res) => {
   res.send("Welcome to The StockHub API");
@@ -118,7 +116,6 @@ app.post("/inventory", (req, res) => {
     };
 
   //checks login information by using getUser
-  let login;
   if (product.username === undefined || product.password === undefined) {
     return res.status(400).send("No username or passowrd");
   } else {
@@ -132,9 +129,8 @@ app.post("/inventory", (req, res) => {
               duplicate.then((u) => {
                       if (u.length >= 1) {
                           console.log(u);
-                          res.status(400).send("product already exists, try a different name")
+                          res.status(400).send("product already exists, try a different name");
                       } else {
-
                           //adds product to MongoDB
                           let promise = db.addProduct(product);
                           promise
@@ -172,7 +168,6 @@ app.get("/inventory", (req, res) => {
     };
 
     //searches for user given the username and password
-    let login;
     if (user.username === undefined || user.password === undefined) {
         return res.status(400).send("No username or passowrd");
     } else {
@@ -187,15 +182,13 @@ app.get("/inventory", (req, res) => {
                     .catch((error) => {
                         console.log(error);
                         res.status(500).send("Internal Server Error");
-                    })
+                    });
             } else {
                 res.status(400).send("Invalid username or password");
             }
         });
     }
 });
-
-
 
 // deletes a product given username, password and product name in the body
 app.delete("/inventory", (req, res) => {
@@ -271,7 +264,6 @@ app.put("/inventory", (req, res) => {
             }
         });
     }
-
 });
 
 app.listen(process.env.PORT || port, () => {
