@@ -20,21 +20,32 @@ const Catalog = ({user}) => {
 
     // fetch productData from api
     useEffect(() => {
+        const controller = new AbortController();
+        const signal = controller.signal;
+    
         const fetchProducts = async () => {
             try {
-                const res = await fetch(`https://307inventoryproject-a0f3f8g3dhcedrek.westus3-01.azurewebsites.net/inventory?username=${user.username}&password=${user.password}`);
+                const res = await fetch(`https://307inventoryproject-a0f3f8g3dhcedrek.westus3-01.azurewebsites.net/inventory?username=${user.username}&password=${user.password}`, { signal });
                 if (!res.ok) {
-                    throw new Error ('Failed to fetch products');
+                    throw new Error('Failed to fetch products');
                 }
                 const data = await res.json();
                 setProductData(data);
             } catch (error) {
-                console.error('Error fetching products:', error);
+                if (error.name === 'AbortError') {
+                    console.log('Fetch aborted');
+                } else {
+                    console.error('Error fetching products:', error);
+                    alert('Unable to fetch product data. Please try again later.');
+                }
             }
         };
-
+    
         fetchProducts();
-    }, []);
+    
+        return () => controller.abort(); // Cleanup to avoid memory leaks
+    }, [user.username, user.password]);
+    
 
     const toggleView = (mode) =>{
         setViewMode(mode);
@@ -56,32 +67,40 @@ const Catalog = ({user}) => {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        try{
-            const res = await fetch(`https://307inventoryproject-a0f3f8g3dhcedrek.westus3-01.azurewebsites.net/inventory?username=${user.username}&password=${user.password}`, {
-                method: "POST",
-                headers: {
-                    "Content-Type" : "application/json",
-                },
-                body: JSON.stringify(newProduct)
-            });
+        if (newProduct.price <= 0 || newProduct.quantity <= 0) {
+            alert("Price and quantity must be positive numbers.");
+            return;
+        }
+        try {
+            const res = await fetch(
+                `https://307inventoryproject-a0f3f8g3dhcedrek.westus3-01.azurewebsites.net/inventory?username=${user.username}&password=${user.password}`,
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(newProduct),
+                }
+            );
             if (!res.ok) {
                 throw new Error("Failed to add product");
             }
+            
+            const addedProduct = await res.json();
+            setProductData((prevData) => [...prevData, addedProduct]);
             alert("Product added successfully.");
+            toggleOverlay();
         } catch (error) {
             console.error("Error submitting product:", error);
             alert("An error occurred while adding the product. Please try again.");
         }
-        toggleOverlay();
     };
-
-
+    
     return (
         <div >
             <Navbar/>
             <div className={styles.container}>
                 <div className={styles.filterbar}>
-                    {/* add button for adding products */}
                     {/* add bar for filtering */}
                     <button className={`btn ${styles.addBtn}`} onClick={toggleOverlay}></button>
                     <button className={`btn ${styles.viewBtn}`} onClick={() => toggleView('table')}>Table View</button>
@@ -93,62 +112,69 @@ const Catalog = ({user}) => {
                 </div>
 
                 {overlayVisibility && (
-                    <div className={styles.overlay}>
+                    <div className={`${styles.overlay} ${styles.show}`}>
                         <div className={styles.overlayContent}>
+                            <button
+                                className={styles.closeBtn}
+                                onClick={toggleOverlay}
+                                aria-label="Close overlay"
+                            >
+                                &times;
+                            </button>
                             <h2>Add New Product</h2>
                             <form onSubmit={handleSubmit}>
-                                <label>
-                                    Product Name:
-                                    <input
-                                        type="text"
-                                        name="name"
-                                        value={newProduct.name}
-                                        onChange={handleChange}
-                                        required
-                                    />
-                                </label>
-                                <label>
-                                    Price:
-                                    <input
-                                        type="number"
-                                        name="price"
-                                        value={newProduct.price}
-                                        onChange={handleChange}
-                                        required
-                                    />
-                                </label>
-                                <label>
-                                    Quantity:
-                                    <input
-                                        type="number"
-                                        name="qty"
-                                        value={newProduct.quantity}
-                                        onChange={handleChange}
-                                        required
-                                    />
-                                </label>
-                                <label>
-                                    Supplier:
-                                    <input
-                                        type="text"
-                                        name="qty"
-                                        value={newProduct.supplier}
-                                        onChange={handleChange}
-                                        required
-                                    />
-                                </label>
-                                <label>
-                                    Description:
-                                    <input
-                                        type="text"
-                                        name="qty"
-                                        value={newProduct.description}
-                                        onChange={handleChange}
-                                        required
-                                    />
-                                </label>
-                                <button type="submit">Add Product</button>
-                                <button type="button" onClick={toggleOverlay}>Cancel</button>
+                                <label htmlFor="name">Product Name:</label>
+                                <input
+                                    type="text"
+                                    id="name"
+                                    name="name"
+                                    value={newProduct.name}
+                                    onChange={handleChange}
+                                    required
+                                />
+
+                                <label htmlFor="price">Price:</label>
+                                <input
+                                    type="number"
+                                    id="price"
+                                    name="price"
+                                    value={newProduct.price}
+                                    onChange={handleChange}
+                                    required
+                                />
+
+                                <label htmlFor="quantity">Quantity:</label>
+                                <input
+                                    type="number"
+                                    id="quantity"
+                                    name="quantity"
+                                    value={newProduct.quantity}
+                                    onChange={handleChange}
+                                    required
+                                />
+
+                                <label htmlFor="supplier">Supplier:</label>
+                                <input
+                                    type="text"
+                                    id="supplier"
+                                    name="supplier"
+                                    value={newProduct.supplier}
+                                    onChange={handleChange}
+                                    required
+                                />
+
+                                <label htmlFor="description">Description:</label>
+                                <input
+                                    type="text"
+                                    id="description"
+                                    name="description"
+                                    value={newProduct.description}
+                                    onChange={handleChange}
+                                    required
+                                />
+
+                                <button type="submit" className={styles.btn}>Add Product</button>
+                                <button type="button" className={styles.btn} onClick={toggleOverlay}>Cancel</button>
                             </form>
                         </div>
                     </div>
