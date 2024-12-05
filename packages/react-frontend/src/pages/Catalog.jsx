@@ -7,6 +7,7 @@ import * as jwt_decode from "jwt-decode";
 
 
 const Catalog = () => {
+    const[test, setTest] = useState(false);
     const [productData, setProductData] = useState([]);
     const [overlayVisibility, setOverlayVisibility] = useState(false);
     const [newProduct, setNewProduct] = useState({
@@ -98,6 +99,10 @@ const Catalog = () => {
         return sortedData;
     };
 
+    const toggleTest = () => {
+        setTest(!test);
+    }
+
     const toggleOverlay = () => {
         setOverlayVisibility(!overlayVisibility);
         setEditingProduct(null);
@@ -186,6 +191,7 @@ const Catalog = () => {
     const handleProductClick = (product) => {
         setSelectedProduct(product);
         setEditingProduct(product);
+        toggleTest();
         toggleOverlay();
     };
 
