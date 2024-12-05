@@ -1,20 +1,34 @@
+//src/pages/SignUp.jsx
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import SignUpForm from "./SignUpForm";
 import styles from "./LogIn.module.css";
 
-const SignUp = ({verifySignUp}) => {
+const SignUp = () => {
     const navigate = useNavigate();
 
-    const signup = (userData) => {
-        //verifySignUp should verify that
-        //password and email and username
-        //are okay (i.e secure password)
-        //it should also call a function
-        //that will create a user and upload to db
-        verifySignUp(userData);
-        navigate("/login")
-    }
+    const signup = async (userData) => {
+        const { email, username, password, confirmPassword } = userData;
+
+        try{
+            const res = await fetch("https://307inventoryproject-a0f3f8g3dhcedrek.westus3-01.azurewebsites.net/signup", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ email, username, password }),
+            });
+            if (!res.ok) {
+                throw new Error("Signup failed");
+            }
+
+            alert("User registered successfully");
+            navigate("/login");
+        } catch (error) {
+            console.error("Error during signup:", error);
+            alert("Error during signup, please try again");
+        }
+    };
 
     return (
         <div className="flex-columns">
