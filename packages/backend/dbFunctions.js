@@ -35,8 +35,7 @@ async function addUser(user) {
 }
 
 //internal fuction to get a user
-// res_handling parameter is a lambda function to handle logic after password comparision
-async function getUser(credentials, res_handling) {
+async function getUser(credentials) {
   const user = await Models.User.findOne({ username: credentials.username});
   if (!user) {
     return null;

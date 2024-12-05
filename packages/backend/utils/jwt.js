@@ -15,7 +15,7 @@ export const generateToken = (user) => {
 export const verifyToken = (token) => {
     try {
         return jwt.verify(token, KEY);
-    } catch (error) {
+    } catch {
         return null;
     }
 };

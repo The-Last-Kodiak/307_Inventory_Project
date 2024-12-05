@@ -92,7 +92,7 @@ app.post("/catalog", authenticate, async (req,res) => {
     try{
         const product = { product_name, price, quantity, supplier, description, sku, username: req.user.username };
         const newProduct = await db.addProduct(product);
-        res.status(201).json({ message: "Product added successfully" , product: newProduct})
+        res.status(201).json({ message: "Product added successfully" , product: newProduct});
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: "Failed to add product"});
