@@ -42,14 +42,13 @@ async function getUser(credentials, res_handling) {
   if (!user) {
     return null;
   }
+  const isPasswordValid = await bcrypt.compare(credentials.password, user.password);
   
-  if (credentials.password == user.password) {
+  if(isPasswordValid){
     return user;
-  }
-  else {
+  } else {
     return null;
   }
-
 }
 
 function addProduct(product) {
