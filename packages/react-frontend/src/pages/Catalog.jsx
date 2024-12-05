@@ -1,3 +1,4 @@
+// react-frontend/src/pages/Catalog.jsx
 import React, {useState, useEffect} from "react";
 import Navbar from '../components/Navbar';
 import TableView from './TableView';
@@ -5,12 +6,14 @@ import CardView from './CardView';
 import styles from './Catalog.module.css';
 
 
-const Catalog = ({user}) => {
+const Catalog = () => {
     const [viewMode, setViewMode] = useState('table');
     const [productData, setProductData] = useState([]);
     const [overlayVisibility, setOverlayVisibility] = useState(false);
     const [newProduct, setNewProduct] = useState({
-        name: '',
+        username: '',
+        product_name: '',
+        sku: '',
         price: '',
         quantity: '',
         supplier: '',
@@ -27,7 +30,13 @@ const Catalog = ({user}) => {
     
         const fetchProducts = async () => {
             try {
-                const res = await fetch(`https://307inventoryproject-a0f3f8g3dhcedrek.westus3-01.azurewebsites.net/inventory?username=${user.username}&password=${user.password}`, { signal });
+                const token = localStorage.getItem('jwtToken');
+                const res = await fetch(`https://307inventoryproject-a0f3f8g3dhcedrek.westus3-01.azurewebsites.net/catalog`, { 
+                    signal,
+                    headers: {
+                        "Authorization": `Bearer ${token}`
+                    },
+                });
                 if (!res.ok) {
                     throw new Error("Failed to fetch products");
                 }
@@ -46,7 +55,7 @@ const Catalog = ({user}) => {
         fetchProducts();
     
         return () => controller.abort(); // Cleanup to avoid memory leaks
-    }, [user.username, user.password]);
+    }, []);
 
     useEffect(() => {
         if (sortCriteria) {
@@ -105,11 +114,12 @@ const Catalog = ({user}) => {
         }
         try {
             const res = await fetch(
-                `https://307inventoryproject-a0f3f8g3dhcedrek.westus3-01.azurewebsites.net/inventory?username=${user.username}&password=${user.password}`,
+                `https://307inventoryproject-a0f3f8g3dhcedrek.westus3-01.azurewebsites.net/catalog`,
                 {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
+                        "Authorization": `Bearer ${token}`,
                     },
                     body: JSON.stringify(newProduct),
                 }
@@ -128,7 +138,8 @@ const Catalog = ({user}) => {
                 price: '',
                 quantity: '',
                 supplier: '',
-                description: ''
+                description: '',
+                sku: ''
             });
 
             toggleOverlay();
@@ -215,6 +226,16 @@ const Catalog = ({user}) => {
                                     id="description"
                                     name="description"
                                     value={newProduct.description}
+                                    onChange={handleChange}
+                                    required
+                                />
+
+                                <label htmlFor="sku">SKU:</label>
+                                <input
+                                    type="text"
+                                    id="sku"
+                                    name="sku"
+                                    value={newProduct.sku}
                                     onChange={handleChange}
                                     required
                                 />
