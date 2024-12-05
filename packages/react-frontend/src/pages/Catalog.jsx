@@ -248,7 +248,7 @@ const Catalog = () => {
                         <button className={`btn ${styles.filterBtn}`} onClick={() => setSortCriteria('quantityDesc')}>Sort by Quantity (High to Low)</button>
                     </div>
 
-                    <div>
+                    <div className={`${styles.tableContainer}`}>
                         <TableView productData={filteredData} onDelete={handleDelete} handleClick={handleProductClick}/>
                     </div>
 
