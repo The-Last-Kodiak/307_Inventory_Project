@@ -39,11 +39,19 @@ async function addUser(user) {
 async function getUser(credentials, res_handling) {
   const user = await Models.User.findOne({ username: credentials.username});
   if (!user) {
-     return null;
-    }
-
-    const res_promise = await bcrypt.compare(credentials.password, user.password, res_handling);
-    return res_promise;
+    return null;
+  }
+  console.log(credentials.password);
+  console.log(user.password);
+  console.log(user.password==credentials.password);
+  // const res_promise = await bcrypt.compare(credentials.password, user.password, res_handling);
+  // return res_promise;
+  if (credentials.password == user.password) {
+    return user;
+  }
+  else {
+    return null;
+  }
 
 }
 
