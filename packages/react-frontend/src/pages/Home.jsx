@@ -19,7 +19,7 @@ const Home = () => {
         <div className="flex-items">
           <div className="row">
             <div className="flex-item">
-              <h4>Low-Stock Items</h4>
+              <h4>Low-Stock</h4>
               <ProductCard 
                 img="https://i.pinimg.com/originals/07/29/24/072924e41f4a7d6bf478ea98af7bb34f.jpg" 
                 name="Cal Poly Hoodie"
