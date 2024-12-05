@@ -239,7 +239,6 @@ const Catalog = () => {
     return (
         <div >
             <Navbar/>
-            {selectedProduct ? ( <ProductDetails product={selectedProduct} onBack={toggleOverlay} />) : (
                 <div className={styles.container}>
                     <div className={styles.filterbar}>
                         <button className={`btn ${styles.addBtn}`} onClick={toggleOverlay}>Add Product</button>
@@ -438,7 +437,7 @@ const Catalog = () => {
                             </div>
                         </div>
                     )}
-                </div>)}
+                </div>
         </div>
     );
 };
