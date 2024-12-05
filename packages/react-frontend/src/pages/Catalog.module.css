@@ -52,6 +52,10 @@
     font-size: 16px;
 }
 
+.table .btn{
+    margin-right:10px;
+}
+
 .overlay {
     position: fixed;
     top: 0;
