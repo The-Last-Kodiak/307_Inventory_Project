@@ -1,3 +1,4 @@
+//backend.dbFunctions.js
 import mongoose from "mongoose";
 import Models from "./databaseSchema.js";
 import dotenv from "dotenv";
@@ -41,11 +42,7 @@ async function getUser(credentials, res_handling) {
   if (!user) {
     return null;
   }
-  console.log(credentials.password);
-  console.log(user.password);
-  console.log(user.password==credentials.password);
-  // const res_promise = await bcrypt.compare(credentials.password, user.password, res_handling);
-  // return res_promise;
+  
   if (credentials.password == user.password) {
     return user;
   }
