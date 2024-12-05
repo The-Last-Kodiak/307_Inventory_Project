@@ -16,10 +16,23 @@ const LogIn = ({ onLogin }) => {
 
     const handleAuth = async () => {
         try {
-            const res = await fetch(`https://307inventoryproject-a0f3f8g3dhcedrek.westus3-01.azurewebsites.net/inventory?username=${username}&password=${password}`)
+            const res = await fetch(`https://307inventoryproject-a0f3f8g3dhcedrek.westus3-01.azurewebsites.net/login`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    username: username,
+                    password: password,
+                }),
+            })
             if (!res.ok) {
                 throw new Error('Authentication failed');
             }
+            
+            const data = await res.json();
+            localStorage.setItem('jwtToken', data.token);
+            
             onLogin({ username, password });
             navigate("/home");
         } catch (error) {
