@@ -32,8 +32,8 @@ const LogIn = ({ onLogin }) => {
             
             const data = await res.json();
             localStorage.setItem('jwtToken', data.token);
-            
-            onLogin({ username, password });
+
+            onLogin();
             navigate("/home");
         } catch (error) {
             console.error("Error during authentication:", error);
@@ -48,10 +48,10 @@ const LogIn = ({ onLogin }) => {
     };
 
     return (
-    <div className={`container ${styles.container}`}>
-        <h1>Supply<span>Hub</span></h1>
-        <LogInForm login={login}/>
-    </div>
+        <div className={`container ${styles.container}`}>
+            <h1>Supply<span>Hub</span></h1>
+            <LogInForm login={login}/>
+        </div>
     );
 };
 
