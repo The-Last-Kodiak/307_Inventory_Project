@@ -21,23 +21,32 @@ const Home = () => {
             <div className="flex-item">
               <h4>Low-Stock Items</h4>
               <ProductCard 
-                name="Cal Poly Hoodie" 
-                price="39.99" 
-                quantity="5" 
-                filterLink="/catalog?sort=quantityAsc&stock=low"
-              />
+                img="https://i.pinimg.com/originals/07/29/24/072924e41f4a7d6bf478ea98af7bb34f.jpg" 
+                name="Cal Poly Hoodie"
+              ></ProductCard>
+              {/* link to catalog with filter by lowest stock to highest stock */}
+              <Link className="link" to="/catalog">See more here</Link>
             </div>
 
             <div className="flex-item">
               <h4>Best Sellers</h4>
               <ProductCard 
-                name="Cal Poly Hat" 
-                price="19.99" 
-                quantity="50" 
-                filterLink="/catalog?sort=quantityDesc&category=bestSeller"
-              />
+                img="https://th.bing.com/th/id/OIP.L_z4gSypyO9Ry7LQziNpRwHaHa?rs=1&pid=ImgDetMain" 
+                name="Cal Poly Hat"
+              ></ProductCard>
+              {/* link to catalog with filter by highest demand to lowest demand */}
+              <Link className="link" to="/catalog">See more here</Link>
             </div>
 
+            <div className="flex-item">
+              <h4>Flagged Items</h4>
+              <ProductCard 
+                img="https://images-na.ssl-images-amazon.com/images/I/61UksPqCFML._AC_UX569_.jpg" 
+                name="Cal Poly Sweatpants"
+              ></ProductCard>
+              {/* link to catalog with filter by flagged items */}
+              <Link className="link" to="/catalog">See more here</Link>
+            </div>
           </div>
         </div>
       </div>
