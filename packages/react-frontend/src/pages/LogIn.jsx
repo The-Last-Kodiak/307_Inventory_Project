@@ -30,7 +30,7 @@ const LogIn = ({ onLogin }) => {
             navigate("/home");
         } catch (error) {
             console.error("Error during authentication:", error);
-            alert("Invalid credentials");
+            // alert("Invalid credentials");
         }
     };
 

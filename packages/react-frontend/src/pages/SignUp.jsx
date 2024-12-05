@@ -10,7 +10,7 @@ const SignUp = () => {
     const signup = async (userData) => {
         const { email, username, password, confirmPassword } = userData;
         if(password !== confirmPassword){
-            alert("Passwords do not match");
+            // alert("Passwords do not match");
             return;
         }
 
@@ -26,11 +26,11 @@ const SignUp = () => {
                 throw new Error("Signup failed");
             }
 
-            alert("User registered successfully");
+            // alert("User registered successfully");
             navigate("/login");
         } catch (error) {
             console.error("Error during signup:", error);
-            alert("Error during signup, please try again");
+            // alert("Error during signup, please try again");
         }
     };
 

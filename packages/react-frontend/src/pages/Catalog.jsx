@@ -47,7 +47,7 @@ const Catalog = () => {
                     console.log("Fetch aborted");
                 } else {
                     console.error("Error fetching products:", error);
-                    alert("Unable to fetch product data. Please try again later.");
+                    // alert("Unable to fetch product data. Please try again later.");
                 }
             }
         };
@@ -114,13 +114,13 @@ const Catalog = () => {
     const handleSubmit = async (event) => {
         event.preventDefault();
         if (newProduct.price <= 0 || newProduct.quantity <= 0) {
-            alert("Price and quantity must be positive numbers.");
+            // alert("Price and quantity must be positive numbers.");
             return;
         }
 
         const token = localStorage.getItem("jwtToken");
         if (!token) {
-            alert("You must be logged in to add products");
+            // alert("You must be logged in to add products");
             return;
         }
 
@@ -142,7 +142,7 @@ const Catalog = () => {
             
             const addedProduct = await res.json();
             setProductData((prevData) => [...prevData, addedProduct.product]);
-            alert("Product added successfully.");
+            // alert("Product added successfully.");
 
             //reset form after submission
             setNewProduct({
@@ -157,7 +157,7 @@ const Catalog = () => {
             toggleOverlay();
         } catch (error) {
             console.error("Error submitting product:", error);
-            alert("An error occurred while adding the product. Please try again.");
+            // alert("An error occurred while adding the product. Please try again.");
         }
     };
 
@@ -176,10 +176,10 @@ const Catalog = () => {
             }
 
             setProductData((prevData) => prevData.filter((product) => product._id !== productId));
-            alert("Product deleted successfully");
+            // alert("Product deleted successfully");
         } catch (error) {
             console.error("Error deleting product:", error);
-            alert("An error occurred while deleting the product. Please try again");
+            // alert("An error occurred while deleting the product. Please try again");
         }
     };
 
@@ -202,7 +202,7 @@ const Catalog = () => {
 
         const token = localStorage.getItem("jwtToken");
         if (!token) {
-            alert("You must be logged in to edit products");
+            // alert("You must be logged in to edit products");
             return;
         }
 
@@ -228,11 +228,11 @@ const Catalog = () => {
                     product._id === updatedProduct.product._id ? updatedProduct.product : product
                 )
             );
-            alert("Product updated successfully.");
+            // alert("Product updated successfully.");
             toggleOverlay();
         } catch (error) {
             console.error("Error submitting product update:", error);
-            alert("An error occurred while updating the product. Please try again.");
+            // alert("An error occurred while updating the product. Please try again.");
         }
     };
     
