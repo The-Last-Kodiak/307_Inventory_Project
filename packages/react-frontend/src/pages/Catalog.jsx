@@ -4,6 +4,7 @@ import Navbar from '../components/Navbar';
 import TableView from './TableView';
 import CardView from './CardView';
 import styles from './Catalog.module.css';
+import jwt_decode from "jwt-decode";
 
 
 const Catalog = () => {
@@ -65,7 +66,17 @@ const Catalog = () => {
             setFilteredData(productData);
         }
     }, [sortCriteria, productData]);
-    
+
+    useEffect(() => {
+        const token = localStorage.getItem("authToken");
+        if(token) {
+            const decoded = jwt_decode(token);
+            setNewProduct((prevState) => ({
+                ...prevState,
+                username: decoded.username
+            }));
+        }
+    }, []);
 
     const applySorting = (criteria) => {
         let sortedData = [...productData];
@@ -190,6 +201,16 @@ const Catalog = () => {
                                     required
                                 />
 
+                                <label htmlFor="sku">SKU:</label>
+                                <input
+                                    type="text"
+                                    id="sku"
+                                    name="sku"
+                                    value={newProduct.sku}
+                                    onChange={handleChange}
+                                    required
+                                />
+
                                 <label htmlFor="price">Price:</label>
                                 <input
                                     type="number"
@@ -226,16 +247,6 @@ const Catalog = () => {
                                     id="description"
                                     name="description"
                                     value={newProduct.description}
-                                    onChange={handleChange}
-                                    required
-                                />
-
-                                <label htmlFor="sku">SKU:</label>
-                                <input
-                                    type="text"
-                                    id="sku"
-                                    name="sku"
-                                    value={newProduct.sku}
                                     onChange={handleChange}
                                     required
                                 />
