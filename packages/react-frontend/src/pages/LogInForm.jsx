@@ -20,9 +20,10 @@ const LogInForm = ({ login }) => {
     };
 
     // check login credentials here
-    const submitForm = (event) =>{
+    const submitForm = async (event) =>{
         event.preventDefault();
-        login(user);
+        await login(user);
+        setUser({ username: "", password: ""});
     };
 
     return (

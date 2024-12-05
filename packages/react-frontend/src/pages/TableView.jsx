@@ -3,8 +3,8 @@ import styles from "./Catalog.module.css"
 
 const TableView = ({ productData, onDelete }) => {
     const handleDelete = (productId) => {
-        onDelete(productId)
-    }
+        onDelete(productId);
+    };
     const TableHeader = () => {
         return (
             <thead className={styles.thead}>
@@ -16,17 +16,17 @@ const TableView = ({ productData, onDelete }) => {
                     <th>Actions</th>
                 </tr>
             </thead>
-        )
-    }
+        );
+    };
     const TableBody = () => {
         return (
             <tbody>
                 {productData.map((product) => (
                     <tr key={product._id}>
                         <td>{product.sku}</td>
-                        <td>{product.name}</td>
+                        <td>{product.product_name}</td>
                         <td>{product.price}</td>
-                        <td>{product.qty}</td>
+                        <td>{product.quantity}</td>
                         <td>
                             <div className={styles.btnContainer}>
                                 <button className={`btn ${styles.btn}`}>View</button>
@@ -36,8 +36,8 @@ const TableView = ({ productData, onDelete }) => {
                     </tr>
                 ))}
             </tbody>
-        )
-    }
+        );
+    };
     return (
         <table className={styles.table}>
             <TableHeader/>

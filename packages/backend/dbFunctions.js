@@ -23,11 +23,15 @@ mongoose
   .catch((error) => console.log(error));
 
 async function addUser(user) {
-  const hashedPassword = await bcrypt.hash(user.password, SALT_ROUNDS);
-  user.password = hashedPassword;
-  const userToAdd = new Models.User(user);
-  const promise = userToAdd.save();
-  return promise;
+  try{
+    const hashedPassword = await bcrypt.hash(user.password, SALT_ROUNDS);
+    user.password = hashedPassword;
+    const userToAdd = new Models.User(user);
+    const promise = userToAdd.save();
+    return promise;
+  } catch (error) {
+    console.log("Error adding user to database:", error);
+  }
 }
 
 //internal fuction to get a user
@@ -74,7 +78,7 @@ function updateProduct(product) {
 function getProducts(user) {
   let promise = Models.Inventory.find(
     { username: user.username },
-    { _id: 0, __v: 0, username: 0 },
+    {__v: 0, username: 0 },
   );
   return promise;
 }
@@ -85,7 +89,7 @@ function getProduct(product){
             username: product.username,
             product_name: product.product_name
         },
-        { _id: 0, __v: 0, username: 0 },
+        {__v: 0, username: 0 },
     );
     return promise;
 }
@@ -97,4 +101,5 @@ export default {
   updateProduct,
   getProduct,
   getProducts,
+  Models,
 };

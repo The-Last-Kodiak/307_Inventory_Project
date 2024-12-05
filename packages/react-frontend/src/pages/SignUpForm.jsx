@@ -1,3 +1,4 @@
+// src/pages/SignUpForm.jsx
 import React, { useState } from "react";
 import styles from "./LogIn.module.css";
 import { Link } from "react-router-dom";
@@ -20,10 +21,16 @@ const SignUpForm = ({signup}) => {
         }));
     }
 
-    const submitForm = (event) => {
+    const submitForm = async (event) => {
         event.preventDefault();
         if(user.password === user.confirmPassword) {
-            signup(user);
+            await signup(user);
+            setUser({
+                email: "",
+                username: "",
+                password: "",
+                confirmPassword: ""
+            });
         } else {
             alert("Passwords do not match");
         }

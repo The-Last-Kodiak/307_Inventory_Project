@@ -46,7 +46,7 @@ const App = () => {
         <Route
           path="/catalog"
           element={
-            isAuthenticated ? (<Catalog user={user}/>) : (<Navigate to="/login" replace />)
+            isAuthenticated ? (<Catalog />) : (<Navigate to="/login" replace />)
           }
         />
 

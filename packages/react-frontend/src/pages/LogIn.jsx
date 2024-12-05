@@ -5,26 +5,20 @@ import LogInForm from "./LogInForm";
 import styles from "./LogIn.module.css";
 
 const LogIn = ({ onLogin }) => {
-    // we need to return a promise that connects to the backend,
-    // inputing user authentication data and if successful, reroutes to the homepage
-    // if error, log error in console and display an error message to user
-
     const navigate = useNavigate();
 
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
+    // const [username, setUsername] = useState('');
+    // const [password, setPassword] = useState('');
 
-    const handleAuth = async () => {
+    const handleAuth = async (userData) => {
         try {
-            const res = await fetch(`https://307inventoryproject-a0f3f8g3dhcedrek.westus3-01.azurewebsites.net/login`, {
+            console.log("Sending request with body:", JSON.stringify(userData));
+            const res = await fetch(`http://localhost:8000/login`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({
-                    username: username,
-                    password: password,
-                }),
+                body: JSON.stringify(userData),
             })
             if (!res.ok) {
                 throw new Error('Authentication failed');
@@ -42,9 +36,10 @@ const LogIn = ({ onLogin }) => {
     };
 
     const login = (userData) => {
-        setUsername(userData.username);
-        setPassword(userData.password);
-        handleAuth();
+        // setUsername(userData.username);
+        // setPassword(userData.password);
+        console.log("Submitting user:", userData)
+        handleAuth(userData);
     };
 
     return (

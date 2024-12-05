@@ -4,7 +4,7 @@ import Navbar from '../components/Navbar';
 import TableView from './TableView';
 import CardView from './CardView';
 import styles from './Catalog.module.css';
-import jwt_decode from "jwt-decode";
+import * as jwt_decode from "jwt-decode";
 
 
 const Catalog = () => {
@@ -12,13 +12,12 @@ const Catalog = () => {
     const [productData, setProductData] = useState([]);
     const [overlayVisibility, setOverlayVisibility] = useState(false);
     const [newProduct, setNewProduct] = useState({
-        username: '',
-        product_name: '',
-        sku: '',
-        price: '',
-        quantity: '',
-        supplier: '',
-        description: ''
+        product_name: "",
+        sku: "",
+        price: "",
+        quantity: "",
+        supplier: "",
+        description: ""
     });
     const [filteredData, setFilteredData] = useState([]);
     const [sortCriteria, setSortCriteria] = useState(null); 
@@ -32,7 +31,7 @@ const Catalog = () => {
         const fetchProducts = async () => {
             try {
                 const token = localStorage.getItem('jwtToken');
-                const res = await fetch(`https://307inventoryproject-a0f3f8g3dhcedrek.westus3-01.azurewebsites.net/catalog`, { 
+                const res = await fetch(`http://localhost:8000/catalog`, { 
                     signal,
                     headers: {
                         "Authorization": `Bearer ${token}`
@@ -121,9 +120,16 @@ const Catalog = () => {
             alert("Price and quantity must be positive numbers.");
             return;
         }
+
+        const token = localStorage.getItem("jwtToken");
+        if (!token) {
+            alert("You must be logged in to add products");
+            return;
+        }
+
         try {
             const res = await fetch(
-                `https://307inventoryproject-a0f3f8g3dhcedrek.westus3-01.azurewebsites.net/catalog`,
+                `http://localhost:8000/catalog`,
                 {
                     method: "POST",
                     headers: {
@@ -143,12 +149,12 @@ const Catalog = () => {
 
             //reset form after submission
             setNewProduct({
-                name: '',
-                price: '',
-                quantity: '',
-                supplier: '',
-                description: '',
-                sku: ''
+                name: "",
+                sku: "",
+                price: "",
+                quantity: "",
+                supplier: "",
+                description: "",
             });
 
             toggleOverlay();
@@ -159,9 +165,11 @@ const Catalog = () => {
     };
 
     const handleDelete = async (productId) => {
+        console.log("Attempting to delete");
         const token = localStorage.getItem("jwtToken");
         try{
-            const res = await fetch(`https://307inventoryproject-a0f3f8g3dhcedrek.westus3-01.azurewebsites.net/catalog/${productId}`, {
+            console.log("fetching");
+            const res = await fetch(`http://localhost:8000/catalog/${productId}`, {
                 method: "DELETE",
                 headers: {
                     "Content-Type": "application/json",
@@ -214,9 +222,9 @@ const Catalog = () => {
                                 <label htmlFor="name">Product Name:</label>
                                 <input
                                     type="text"
-                                    id="name"
-                                    name="name"
-                                    value={newProduct.name}
+                                    id="product_name"
+                                    name="product_name"
+                                    value={newProduct.product_name}
                                     onChange={handleChange}
                                     required
                                 />

@@ -34,6 +34,7 @@ app.get("/", (req, res) => {
 });
 
 app.post("/signup", async (req,res) => {
+    console.log("Attempting to sign up");
     const { username, password, email } = req.body;
 
     if(!username || !password || !email) {
@@ -41,12 +42,14 @@ app.post("/signup", async (req,res) => {
     }
 
     try{
+        console.log("trying to find existing user");
         const existingUser = await db.Models.User.findOne({ username });
         if (existingUser) {
             return res.status(400).json({ message: "Username already exists"});
         }
 
         const newUser = { username, password, email };
+        console.log("New user data:", newUser);
         await db.addUser(newUser);
 
         res.status(201).json({ message: "User registered successfully" });
@@ -99,16 +102,18 @@ app.post("/catalog", authenticate, async (req,res) => {
     }
 });
 
-app.delete("/catalog/productId", authenticate, async (req,res) => {
+app.delete("/catalog/:productId", authenticate, async (req,res) => {
+    console.log("trying to remove product by id")
     const { productId } = req.params;
 
     try{
-        const product = await db.Models.Product.findOne({_id: productId, username: req.user.username });
+        console.log("finding product")
+        const product = await db.Models.Inventory.findOne({_id: productId, username: req.user.username });
         if(!product) {
             return res.status(404).json({ message: "Product not found or you don't have permission to delete it" });
         }
 
-        await db.Models.Product.deleteOne({_id: productId });
+        await db.Models.Inventory.deleteOne({_id: productId });
         res.status(200).json({ message: "Product deleted successfully"});
     } catch (error) {
         console.error(error);
