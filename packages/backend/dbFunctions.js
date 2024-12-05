@@ -8,24 +8,19 @@ dotenv.config();
 mongoose.set("debug", true);
 const SALT_ROUNDS = 10;
 
+// mongoose
+//   .connect(process.env.MONGODB_URI, {
+//     useNewUrlParser: true,
+//     useUnifiedTopology: true,
+//   })
+//   .catch((error) => console.log(error));
+
 mongoose
-  .connect(process.env.MONGODB_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
+  .connect("mongodb://127.0.0.1:27017/SupplyHub", {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
   })
   .catch((error) => console.log(error));
-
-/*mongoose
-    .connect("mongodb://127.0.0.1:27017/databaseSchema", {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-    })
-    .catch((error) => console.log(error));*/
-
-function getUsers() {
-  const promise = Models.User.find();
-  return promise;
-}
 
 async function addUser(user) {
   const hashedPassword = await bcrypt.hash(user.password, SALT_ROUNDS);
@@ -67,6 +62,7 @@ function updateProduct(product) {
         product_name: product.product_name
     }, {
         product_name: product.product_name,
+        sku: product.sku,
         price: product.price,
         quantity: product.quantity,
         supplier: product.supplier,
@@ -94,22 +90,11 @@ function getProduct(product){
     return promise;
 }
 
-function deleteProduct(product) {
-  let p = {
-    username: product.username,
-    product_name: product.product_name,
-  };
-  const promise = Models.Inventory.deleteOne(p);
-  return promise;
-}
-
 export default {
-  getUsers,
   getUser,
   addUser,
   addProduct,
   updateProduct,
   getProduct,
   getProducts,
-  deleteProduct,
 };

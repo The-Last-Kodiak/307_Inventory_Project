@@ -124,15 +124,19 @@ app.listen(process.env.PORT || port, () => {
 // securely log a user in (FETCH USER) - done
 // get a user's catalog (FETCH USER INVENTORY) - done
 // link signup with signup page (CREATE NEW USER) - done
+// link login with login page - done
 // post a new product to a user's catalog (CREATE NEW PRODUCTS) - done
 // link the new product form - done
 // link the inventory fetch - done
 // new product schema to include SKU - done
 // delete a user's product (DELETE USER PRODUCTS) - done
-// create database sample data
+// create database sample data - done
+// test api locally
 // log out button on navbar that calls a logout function
 // create a page component so that users can view an individual product's details
 // home page quick stats
 // flag items
 // card view
 // add comments to explain methods for future reference
+// replace backend with _backend
+// test on build

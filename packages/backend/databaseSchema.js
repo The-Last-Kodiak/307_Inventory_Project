@@ -32,7 +32,7 @@ const UserSchema = new mongoose.Schema(
       },
     },
   },
-  { collection: "users_list" },
+  { collection: "users" },
 );
 
 //add inventory scehema in database here
@@ -99,13 +99,8 @@ const InventorySchema = new mongoose.Schema(
         required: true,
         trim: true,
     },
-    image_path: {
-        type: String,
-        required: false,
-        trim: true,
-    }
   },
-  { collection: "inventory" },
+  { collection: "inventories" },
 );
 
 const User = mongoose.model("User", UserSchema);
