@@ -1,3 +1,4 @@
+// backend/databaseSchema.js
 import mongoose from "mongoose";
 
 const MIN_PW_LEN = 8;
@@ -58,6 +59,18 @@ const InventorySchema = new mongoose.Schema(
           throw new Error(
             "Invalid job, must be at least " + MIN_PR_LEN + " characters.",
           );
+      },
+    },
+    sku: {
+      type: String,
+      required: true,
+      unique: true,
+      trim: true,
+      validate(value) {
+        if(value.length < MIN_PR_LEN)
+          throw new Error(
+            "SKU must be at least " + MIN_PR_LEN + " characters."
+        );
       },
     },
     price: {
