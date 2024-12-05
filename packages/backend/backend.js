@@ -123,12 +123,9 @@ app.delete("/catalog/:productId", authenticate, async (req, res) => {
       username: req.user.username,
     });
     if (!product) {
-      return res
-        .status(404)
-        .json({
-          message:
-            "Product not found or you don't have permission to delete it",
-        });
+      return res.status(404).json({
+        message: "Product not found or you don't have permission to delete it",
+      });
     }
 
     await db.Models.Inventory.deleteOne({ _id: productId });
@@ -157,11 +154,9 @@ app.put("/catalog/:productId", authenticate, async (req, res) => {
     });
 
     if (!product) {
-      return res
-        .status(404)
-        .json({
-          message: "Product not found or you don't have permission to edit it",
-        });
+      return res.status(404).json({
+        message: "Product not found or you don't have permission to edit it",
+      });
     }
 
     product.product_name = product_name;
