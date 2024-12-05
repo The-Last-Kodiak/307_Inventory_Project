@@ -32,7 +32,7 @@ const SignUpForm = ({signup}) => {
                 confirmPassword: ""
             });
         } else {
-            // alert("Passwords do not match");
+            alert("Passwords do not match");
         }
     }
 
