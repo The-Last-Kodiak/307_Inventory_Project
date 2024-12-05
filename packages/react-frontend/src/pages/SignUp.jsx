@@ -10,7 +10,7 @@ const SignUp = () => {
     const signup = async (userData) => {
         const { email, username, password, confirmPassword } = userData;
         if(password !== confirmPassword){
-            // alert("Passwords do not match");
+            alert("Passwords do not match");
             return;
         }
 
