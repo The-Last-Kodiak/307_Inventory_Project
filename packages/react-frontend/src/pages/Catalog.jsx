@@ -2,7 +2,6 @@
 import React, {useState, useEffect} from "react";
 import Navbar from '../components/Navbar';
 import TableView from './TableView';
-import CardView from './CardView';
 import styles from './Catalog.module.css';
 import * as jwt_decode from "jwt-decode";
 
