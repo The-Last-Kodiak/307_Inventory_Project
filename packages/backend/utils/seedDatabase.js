@@ -29,7 +29,7 @@ const users = [
     password: "newUserPassword123",
   },
 ];
-
+// ?retryWrites=true&w=majority&appName=Cluster0"
 const inventories = [
   {
     username: "john_doe",

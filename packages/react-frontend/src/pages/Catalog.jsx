@@ -32,7 +32,7 @@ const Catalog = () => {
         const fetchProducts = async () => {
             try {
                 const token = localStorage.getItem('jwtToken');
-                const res = await fetch(`https://307inventoryproject-a0f3f8g3dhcedrek.westus3-01.azurewebsites.net/catalog`, { 
+                const res = await fetch(`http://localhost:8000/catalog`, { 
                     signal,
                     headers: {
                         "Authorization": `Bearer ${token}`
@@ -127,7 +127,7 @@ const Catalog = () => {
 
         try {
             const res = await fetch(
-                `https://307inventoryproject-a0f3f8g3dhcedrek.westus3-01.azurewebsites.net/catalog`,
+                `http://localhost:8000/catalog`,
                 {
                     method: "POST",
                     headers: {
@@ -165,7 +165,7 @@ const Catalog = () => {
     const handleDelete = async (productId) => {
         const token = localStorage.getItem("jwtToken");
         try{
-            const res = await fetch(`https://307inventoryproject-a0f3f8g3dhcedrek.westus3-01.azurewebsites.net/catalog/${productId}`, {
+            const res = await fetch(`http://localhost:8000/catalog/${productId}`, {
                 method: "DELETE",
                 headers: {
                     "Content-Type": "application/json",
@@ -209,7 +209,7 @@ const Catalog = () => {
 
         try {
             const res = await fetch(
-                `https://307inventoryproject-a0f3f8g3dhcedrek.westus3-01.azurewebsites.net/catalog/${editingProduct._id}`,
+                `http://localhost:8000/catalog/${editingProduct._id}`,
                 {
                     method: "PUT",
                     headers: {
