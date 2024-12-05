@@ -150,15 +150,19 @@ const inventories = [
 ];
 
 const hashPassword = async (password) => {
-  const salt = await bcrypt.genSalt(10); 
+  const salt = await bcrypt.genSalt(10);
   const hashedPassword = await bcrypt.hash(password, salt);
   return hashedPassword;
 };
 
-mongoose.connect("mongodb+srv://the_last_kodiak:CoordinatER@cluster0.ofzol.mongodb.net/SupplyHub", {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-})
+mongoose
+  .connect(
+    "mongodb+srv://the_last_kodiak:CoordinatER@cluster0.ofzol.mongodb.net/SupplyHub",
+    {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    },
+  )
   .then(() => {
     console.log("Connected to MongoDB");
 
@@ -183,7 +187,7 @@ mongoose.connect("mongodb+srv://the_last_kodiak:CoordinatER@cluster0.ofzol.mongo
             inventory.products.map((product) => ({
               ...product,
               username: inventory.username,
-            }))
+            })),
           );
         });
 

@@ -23,7 +23,7 @@ mongoose
 //   .catch((error) => console.log(error));
 
 async function addUser(user) {
-  try{
+  try {
     const hashedPassword = await bcrypt.hash(user.password, SALT_ROUNDS);
     user.password = hashedPassword;
     const userToAdd = new Models.User(user);
@@ -36,13 +36,16 @@ async function addUser(user) {
 
 //internal fuction to get a user
 async function getUser(credentials) {
-  const user = await Models.User.findOne({ username: credentials.username});
+  const user = await Models.User.findOne({ username: credentials.username });
   if (!user) {
     return null;
   }
-  const isPasswordValid = await bcrypt.compare(credentials.password, user.password);
+  const isPasswordValid = await bcrypt.compare(
+    credentials.password,
+    user.password,
+  );
 
-  if(isPasswordValid){
+  if (isPasswordValid) {
     return user;
   } else {
     return null;
@@ -51,7 +54,7 @@ async function getUser(credentials) {
 
 async function addProduct(product) {
   const existingProduct = await Models.Inventory.findOne({ sku: product.sku });
-  if(existingProduct) {
+  if (existingProduct) {
     throw new Error("Product with this SKU already exists.");
   }
   const newProduct = new Models.Inventory(product);
@@ -60,37 +63,40 @@ async function addProduct(product) {
 }
 
 function updateProduct(product) {
-    const promise = Models.Inventory.findOneAndUpdate({
-        username: product.username,
-        product_name: product.product_name
-    }, {
-        product_name: product.product_name,
-        sku: product.sku,
-        price: product.price,
-        quantity: product.quantity,
-        supplier: product.supplier,
-        description: product.description
-    });
-    return promise;
+  const promise = Models.Inventory.findOneAndUpdate(
+    {
+      username: product.username,
+      product_name: product.product_name,
+    },
+    {
+      product_name: product.product_name,
+      sku: product.sku,
+      price: product.price,
+      quantity: product.quantity,
+      supplier: product.supplier,
+      description: product.description,
+    },
+  );
+  return promise;
 }
 
 function getProducts(user) {
   let promise = Models.Inventory.find(
     { username: user.username },
-    {__v: 0, username: 0 },
+    { __v: 0, username: 0 },
   );
   return promise;
 }
 
-function getProduct(product){
-    let promise = Models.Inventory.find(
-        {
-            username: product.username,
-            product_name: product.product_name
-        },
-        {__v: 0, username: 0 },
-    );
-    return promise;
+function getProduct(product) {
+  let promise = Models.Inventory.find(
+    {
+      username: product.username,
+      product_name: product.product_name,
+    },
+    { __v: 0, username: 0 },
+  );
+  return promise;
 }
 
 export default {

@@ -67,10 +67,10 @@ const InventorySchema = new mongoose.Schema(
       unique: true,
       trim: true,
       validate(value) {
-        if(value.length < MIN_PR_LEN)
+        if (value.length < MIN_PR_LEN)
           throw new Error(
-            "SKU must be at least " + MIN_PR_LEN + " characters."
-        );
+            "SKU must be at least " + MIN_PR_LEN + " characters.",
+          );
       },
     },
     price: {
@@ -96,8 +96,8 @@ const InventorySchema = new mongoose.Schema(
     },
     description: {
       type: String,
-        required: true,
-        trim: true,
+      required: true,
+      trim: true,
     },
   },
   { collection: "inventories" },
