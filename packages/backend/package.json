@@ -7,7 +7,8 @@
     "lint": "npx eslint . && npx prettier --check .",
     "test": "echo \"Error: no test specified\" && exit 0",
     "start": "node backend.js",
-    "dev": "nodemon backend.js"
+    "dev": "nodemon _backend.js",
+    "seed": "node utils/seedDatabase.js"
   },
   "author": "",
   "license": "ISC",
@@ -16,6 +17,7 @@
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "express": "^4.21.1",
+    "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.8.0"
   },
   "description": ""

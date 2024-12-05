@@ -121,8 +121,6 @@ app.post("/inventory", (req, res) => {
   } else {
       db.getUser(product, (err, password_res) => {
           if (password_res) {
-
-
               //Checks if product already exists by product_name
               let duplicate = db.getProduct(product);
 
@@ -150,7 +148,6 @@ app.post("/inventory", (req, res) => {
                   .catch((error) => {
                       console.log(error);
                   });
-
           } else {
               res.status(400).send("Invalid username or password");
           }

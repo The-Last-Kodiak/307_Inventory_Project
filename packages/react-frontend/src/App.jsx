@@ -11,24 +11,11 @@ import Catalog from "./pages/Catalog";
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  const [user, setUser] = useState({
-    username: "",
-    password: "",
-  });
-
-  const handleLogin = (userData) => {
+  const handleLogin = () => {
     console.log("Authentication successful");
-    setUser({
-      username: userData.username,
-      password: userData.password,
-    });
     setIsAuthenticated(true);
   };
 
-  const verifySignUp = (userData) => {
-    console.log("not implemented yet");
-  };
-  
   return (
     <Router>
       <Routes>
@@ -39,7 +26,7 @@ const App = () => {
         <Route path="/login" element={<LogIn onLogin={handleLogin} />} />
 
         {/* signup route */}
-        <Route path="/signup" element={<SignUp verifySignUp={verifySignUp}/>} />
+        <Route path="/signup" element={<SignUp />} />
 
         {/* paths that need authentication */}
         <Route
@@ -59,7 +46,7 @@ const App = () => {
         <Route
           path="/catalog"
           element={
-            isAuthenticated ? (<Catalog user={user}/>) : (<Navigate to="/login" replace />)
+            isAuthenticated ? (<Catalog />) : (<Navigate to="/login" replace />)
           }
         />
 

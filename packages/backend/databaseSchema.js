@@ -1,3 +1,4 @@
+// backend/databaseSchema.js
 import mongoose from "mongoose";
 
 const MIN_PW_LEN = 8;
@@ -31,7 +32,7 @@ const UserSchema = new mongoose.Schema(
       },
     },
   },
-  { collection: "users_list" },
+  { collection: "users" },
 );
 
 //add inventory scehema in database here
@@ -60,6 +61,18 @@ const InventorySchema = new mongoose.Schema(
           );
       },
     },
+    sku: {
+      type: String,
+      required: true,
+      unique: true,
+      trim: true,
+      validate(value) {
+        if(value.length < MIN_PR_LEN)
+          throw new Error(
+            "SKU must be at least " + MIN_PR_LEN + " characters."
+        );
+      },
+    },
     price: {
       type: Number,
       required: true,
@@ -86,13 +99,8 @@ const InventorySchema = new mongoose.Schema(
         required: true,
         trim: true,
     },
-    image_path: {
-        type: String,
-        required: false,
-        trim: true,
-    }
   },
-  { collection: "inventory" },
+  { collection: "inventories" },
 );
 
 const User = mongoose.model("User", UserSchema);

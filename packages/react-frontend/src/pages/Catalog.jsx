@@ -1,20 +1,23 @@
+// react-frontend/src/pages/Catalog.jsx
 import React, {useState, useEffect} from "react";
 import Navbar from '../components/Navbar';
 import TableView from './TableView';
 import CardView from './CardView';
 import styles from './Catalog.module.css';
+import * as jwt_decode from "jwt-decode";
 
 
-const Catalog = ({user}) => {
+const Catalog = () => {
     const [viewMode, setViewMode] = useState('table');
     const [productData, setProductData] = useState([]);
     const [overlayVisibility, setOverlayVisibility] = useState(false);
     const [newProduct, setNewProduct] = useState({
-        name: '',
-        price: '',
-        quantity: '',
-        supplier: '',
-        description: ''
+        product_name: "",
+        sku: "",
+        price: "",
+        quantity: "",
+        supplier: "",
+        description: ""
     });
     const [filteredData, setFilteredData] = useState([]);
     const [sortCriteria, setSortCriteria] = useState(null); 
@@ -27,7 +30,13 @@ const Catalog = ({user}) => {
     
         const fetchProducts = async () => {
             try {
-                const res = await fetch(`https://307inventoryproject-a0f3f8g3dhcedrek.westus3-01.azurewebsites.net/inventory?username=${user.username}&password=${user.password}`, { signal });
+                const token = localStorage.getItem('jwtToken');
+                const res = await fetch(`http://localhost:8000/catalog`, { 
+                    signal,
+                    headers: {
+                        "Authorization": `Bearer ${token}`
+                    },
+                });
                 if (!res.ok) {
                     throw new Error("Failed to fetch products");
                 }
@@ -46,7 +55,7 @@ const Catalog = ({user}) => {
         fetchProducts();
     
         return () => controller.abort(); // Cleanup to avoid memory leaks
-    }, [user.username, user.password]);
+    }, []);
 
     useEffect(() => {
         if (sortCriteria) {
@@ -56,7 +65,17 @@ const Catalog = ({user}) => {
             setFilteredData(productData);
         }
     }, [sortCriteria, productData]);
-    
+
+    useEffect(() => {
+        const token = localStorage.getItem("authToken");
+        if(token) {
+            const decoded = jwt_decode(token);
+            setNewProduct((prevState) => ({
+                ...prevState,
+                username: decoded.username
+            }));
+        }
+    }, []);
 
     const applySorting = (criteria) => {
         let sortedData = [...productData];
@@ -87,7 +106,6 @@ const Catalog = ({user}) => {
         setOverlayVisibility(!overlayVisibility);
     };
 
-
     const handleChange = (event) => {
         const { name, value } = event.target;
         setNewProduct(prevState => ({
@@ -96,20 +114,27 @@ const Catalog = ({user}) => {
         }))
     };
 
-
     const handleSubmit = async (event) => {
         event.preventDefault();
         if (newProduct.price <= 0 || newProduct.quantity <= 0) {
             alert("Price and quantity must be positive numbers.");
             return;
         }
+
+        const token = localStorage.getItem("jwtToken");
+        if (!token) {
+            alert("You must be logged in to add products");
+            return;
+        }
+
         try {
             const res = await fetch(
-                `https://307inventoryproject-a0f3f8g3dhcedrek.westus3-01.azurewebsites.net/inventory?username=${user.username}&password=${user.password}`,
+                `http://localhost:8000/catalog`,
                 {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
+                        "Authorization": `Bearer ${token}`,
                     },
                     body: JSON.stringify(newProduct),
                 }
@@ -119,22 +144,45 @@ const Catalog = ({user}) => {
             }
             
             const addedProduct = await res.json();
-            setProductData((prevData) => [...prevData, addedProduct]);
+            setProductData((prevData) => [...prevData, addedProduct.product]);
             alert("Product added successfully.");
 
             //reset form after submission
             setNewProduct({
-                name: '',
-                price: '',
-                quantity: '',
-                supplier: '',
-                description: ''
+                name: "",
+                sku: "",
+                price: "",
+                quantity: "",
+                supplier: "",
+                description: "",
             });
 
             toggleOverlay();
         } catch (error) {
             console.error("Error submitting product:", error);
             alert("An error occurred while adding the product. Please try again.");
+        }
+    };
+
+    const handleDelete = async (productId) => {
+        const token = localStorage.getItem("jwtToken");
+        try{
+            const res = await fetch(`http://localhost:8000/catalog/${productId}`, {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`,
+                }
+            });
+            if(!res.ok) {
+                throw new Error("Failed to delete product");
+            }
+
+            setProductData((prevData) => prevData.filter((product) => product._id !== productId));
+            alert("Product deleted successfully");
+        } catch (error) {
+            console.error("Error deleting product:", error);
+            alert("An error occurred while deleting the product. Please try again");
         }
     };
     
@@ -144,24 +192,24 @@ const Catalog = ({user}) => {
             <div className={styles.container}>
                 <div className={styles.filterbar}>
                     {/* add bar for filtering */}
-                    <button className={`btn ${styles.addBtn}`} onClick={toggleOverlay}></button>
-                    <button onClick={() => setSortCriteria('priceAsc')}>Sort by Price (Low to High)</button>
-                    <button onClick={() => setSortCriteria('priceDesc')}>Sort by Price (High to Low)</button>
-                    <button onClick={() => setSortCriteria('quantityAsc')}>Sort by Quantity (Low to High)</button>
-                    <button onClick={() => setSortCriteria('quantityDesc')}>Sort by Quantity (High to Low)</button>
+                    <button className={`btn ${styles.addBtn}`} onClick={toggleOverlay}>Add Product</button>
+                    <button className={`btn ${styles.filterBtn}`} onClick={() => setSortCriteria('priceAsc')}>Sort by Price (Low to High)</button>
+                    <button className={`btn ${styles.filterBtn}`} onClick={() => setSortCriteria('priceDesc')}>Sort by Price (High to Low)</button>
+                    <button className={`btn ${styles.filterBtn}`} onClick={() => setSortCriteria('quantityAsc')}>Sort by Quantity (Low to High)</button>
+                    <button className={`btn ${styles.filterBtn}`} onClick={() => setSortCriteria('quantityDesc')}>Sort by Quantity (High to Low)</button>
                     <button className={`btn ${styles.viewBtn}`} onClick={() => toggleView('table')}>Table View</button>
                     <button className={`btn ${styles.viewBtn}`} onClick={() => toggleView('card')}>Card View</button>
                 </div>
 
                 <div>
-                    {viewMode === 'table' ? <TableView productData={filteredData} /> : <CardView productData={filteredData} />}
+                    {viewMode === 'table' ? <TableView productData={filteredData} onDelete={handleDelete}/> : <CardView productData={filteredData} />}
                 </div>
 
                 {overlayVisibility && (
                     <div className={`${styles.overlay} ${styles.show}`}>
                         <div className={styles.overlayContent}>
                             <button
-                                className={styles.closeBtn}
+                                className={`btn ${styles.closeBtn}`}
                                 onClick={toggleOverlay}
                                 aria-label="Close overlay"
                             >
@@ -171,16 +219,29 @@ const Catalog = ({user}) => {
                             <form onSubmit={handleSubmit}>
                                 <label htmlFor="name">Product Name:</label>
                                 <input
+                                    className={`${styles.formgroupLabel}`}
                                     type="text"
-                                    id="name"
-                                    name="name"
-                                    value={newProduct.name}
+                                    id="product_name"
+                                    name="product_name"
+                                    value={newProduct.product_name}
+                                    onChange={handleChange}
+                                    required
+                                />
+
+                                <label htmlFor="sku">SKU:</label>
+                                <input
+                                    className={`${styles.formgroupLabel}`}
+                                    type="text"
+                                    id="sku"
+                                    name="sku"
+                                    value={newProduct.sku}
                                     onChange={handleChange}
                                     required
                                 />
 
                                 <label htmlFor="price">Price:</label>
                                 <input
+                                    className={`${styles.formgroupLabel}`}
                                     type="number"
                                     id="price"
                                     name="price"
@@ -191,6 +252,7 @@ const Catalog = ({user}) => {
 
                                 <label htmlFor="quantity">Quantity:</label>
                                 <input
+                                    className={`${styles.formgroupLabel}`}
                                     type="number"
                                     id="quantity"
                                     name="quantity"
@@ -201,6 +263,7 @@ const Catalog = ({user}) => {
 
                                 <label htmlFor="supplier">Supplier:</label>
                                 <input
+                                    className={`${styles.formgroupLabel}`}
                                     type="text"
                                     id="supplier"
                                     name="supplier"
@@ -211,6 +274,7 @@ const Catalog = ({user}) => {
 
                                 <label htmlFor="description">Description:</label>
                                 <input
+                                    className={`${styles.formgroupLabel}`}
                                     type="text"
                                     id="description"
                                     name="description"

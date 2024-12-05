@@ -20,15 +20,16 @@ const LogInForm = ({ login }) => {
     };
 
     // check login credentials here
-    const submitForm = (event) =>{
+    const submitForm = async (event) =>{
         event.preventDefault();
-        login(user);
+        await login(user);
+        setUser({ username: "", password: ""});
     };
 
     return (
         <div className={styles.authform}>
             <h2>Log In</h2>
-            <form>
+            <form onSubmit={submitForm}>
                 <div className={styles.formgroup}>
                     <label htmlFor="username">Username</label>
                     <input 
@@ -55,7 +56,6 @@ const LogInForm = ({ login }) => {
                     <button
                         className={`btn ${styles.btn}`}
                         type="submit"
-                        onClick={submitForm}
                     >Log In</button>
                 </div>
             </form>

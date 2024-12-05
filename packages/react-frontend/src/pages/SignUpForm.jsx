@@ -1,3 +1,4 @@
+// src/pages/SignUpForm.jsx
 import React, { useState } from "react";
 import styles from "./LogIn.module.css";
 import { Link } from "react-router-dom";
@@ -20,20 +21,25 @@ const SignUpForm = ({signup}) => {
         }));
     }
 
-    // verify signup credentials here
-    const submitForm = () =>{
-        // verify that signup credentials meet parameters
-        // not set up yet
-        if( user.password === user.confirmPassword ){
-
-            signup(user);
+    const submitForm = async (event) => {
+        event.preventDefault();
+        if(user.password === user.confirmPassword) {
+            await signup(user);
+            setUser({
+                email: "",
+                username: "",
+                password: "",
+                confirmPassword: ""
+            });
+        } else {
+            alert("Passwords do not match");
         }
     }
 
     return (
         <div className={styles.authform}>
             <h2>Sign Up</h2>
-            <form>
+            <form onSubmit={submitForm}>
                 <div className={styles.formgroup}>
                     <label htmlFor="email">Email</label>
                     <input
@@ -45,7 +51,7 @@ const SignUpForm = ({signup}) => {
                     />
                 </div>
                 <div className={styles.formgroup}>
-                    <label htmlFor="username">Usesrname</label>
+                    <label htmlFor="username">Username</label>
                     <input
                         type="text" 
                         name="username"
@@ -78,7 +84,6 @@ const SignUpForm = ({signup}) => {
                     <button
                         className={`btn ${styles.btn}`}
                         type="submit"
-                        onClick={submitForm}
                     >Sign Up</button>
                 </div>
             </form>
@@ -87,7 +92,7 @@ const SignUpForm = ({signup}) => {
                 Already have an account? <Link className="link" to="/login">Log in here</Link>
             </p>
         </div>
-    )
+    );
 }
 
 export default SignUpForm;

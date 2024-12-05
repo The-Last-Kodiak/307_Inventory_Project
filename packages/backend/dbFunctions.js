@@ -1,3 +1,4 @@
+//backend.dbFunctions.js
 import mongoose from "mongoose";
 import Models from "./databaseSchema.js";
 import dotenv from "dotenv";
@@ -7,31 +8,30 @@ dotenv.config();
 mongoose.set("debug", true);
 const SALT_ROUNDS = 10;
 
+// mongoose
+//   .connect(process.env.MONGODB_URI, {
+//     useNewUrlParser: true,
+//     useUnifiedTopology: true,
+//   })
+//   .catch((error) => console.log(error));
+
 mongoose
-  .connect(process.env.MONGODB_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
+  .connect("mongodb://127.0.0.1:27017/SupplyHub", {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
   })
   .catch((error) => console.log(error));
 
-/*mongoose
-    .connect("mongodb://127.0.0.1:27017/databaseSchema", {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-    })
-    .catch((error) => console.log(error));*/
-
-function getUsers() {
-  const promise = Models.User.find();
-  return promise;
-}
-
 async function addUser(user) {
-  const hashedPassword = await bcrypt.hash(user.password, SALT_ROUNDS);
-  user.password = hashedPassword;
-  const userToAdd = new Models.User(user);
-  const promise = userToAdd.save();
-  return promise;
+  try{
+    const hashedPassword = await bcrypt.hash(user.password, SALT_ROUNDS);
+    user.password = hashedPassword;
+    const userToAdd = new Models.User(user);
+    const promise = userToAdd.save();
+    return promise;
+  } catch (error) {
+    console.log("Error adding user to database:", error);
+  }
 }
 
 //internal fuction to get a user
@@ -39,15 +39,22 @@ async function addUser(user) {
 async function getUser(credentials, res_handling) {
   const user = await Models.User.findOne({ username: credentials.username});
   if (!user) {
-     return null;
-    }
+    return null;
+  }
+  const isPasswordValid = await bcrypt.compare(credentials.password, user.password);
 
-    const res_promise = await bcrypt.compare(credentials.password, user.password, res_handling);
-    return res_promise;
-
+  if(isPasswordValid){
+    return user;
+  } else {
+    return null;
+  }
 }
 
-function addProduct(product) {
+async function addProduct(product) {
+  const existingProduct = await Models.Inventory.findOne({ sku: product.sku });
+  if(existingProduct) {
+    throw new Error("Product with this SKU already exists.");
+  }
   const newProduct = new Models.Inventory(product);
   const promise = newProduct.save();
   return promise;
@@ -59,6 +66,7 @@ function updateProduct(product) {
         product_name: product.product_name
     }, {
         product_name: product.product_name,
+        sku: product.sku,
         price: product.price,
         quantity: product.quantity,
         supplier: product.supplier,
@@ -70,7 +78,7 @@ function updateProduct(product) {
 function getProducts(user) {
   let promise = Models.Inventory.find(
     { username: user.username },
-    { _id: 0, __v: 0, username: 0 },
+    {__v: 0, username: 0 },
   );
   return promise;
 }
@@ -81,27 +89,17 @@ function getProduct(product){
             username: product.username,
             product_name: product.product_name
         },
-        { _id: 0, __v: 0, username: 0 },
+        {__v: 0, username: 0 },
     );
     return promise;
 }
 
-function deleteProduct(product) {
-  let p = {
-    username: product.username,
-    product_name: product.product_name,
-  };
-  const promise = Models.Inventory.deleteOne(p);
-  return promise;
-}
-
 export default {
-  getUsers,
   getUser,
   addUser,
   addProduct,
   updateProduct,
   getProduct,
   getProducts,
-  deleteProduct,
+  Models,
 };
