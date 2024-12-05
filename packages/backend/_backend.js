@@ -121,11 +121,10 @@ app.listen(process.env.PORT || port, () => {
 });
 
 // TODO:
-// log out button on navbar that calls a logout function
 // create a page component so that users can view an individual product's details
 // home page quick stats
 // flag items
-// card view
-// add comments to explain methods for future reference
 // replace backend with _backend
 // test on build
+// card view
+// add comments to explain methods for future reference
