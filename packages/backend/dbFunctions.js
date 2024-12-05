@@ -43,7 +43,7 @@ async function getUser(credentials, res_handling) {
     return null;
   }
   const isPasswordValid = await bcrypt.compare(credentials.password, user.password);
-  
+
   if(isPasswordValid){
     return user;
   } else {
@@ -51,7 +51,11 @@ async function getUser(credentials, res_handling) {
   }
 }
 
-function addProduct(product) {
+async function addProduct(product) {
+  const existingProduct = await Models.Inventory.findOne({ sku: product.sku });
+  if(existingProduct) {
+    throw new Error("Product with this SKU already exists.");
+  }
   const newProduct = new Models.Inventory(product);
   const promise = newProduct.save();
   return promise;
