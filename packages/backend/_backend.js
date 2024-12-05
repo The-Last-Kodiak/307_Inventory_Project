@@ -99,8 +99,25 @@ app.post("/catalog", authenticate, async (req,res) => {
     }
 });
 
+app.delete("/catalog/productId", authenticate, async (req,res) => {
+    const { productId } = req.params;
+
+    try{
+        const product = await db.Models.Product.findOne({_id: productId, username: req.user.username });
+        if(!product) {
+            return res.status(404).json({ message: "Product not found or you don't have permission to delete it" });
+        }
+
+        await db.Models.Product.deleteOne({_id: productId });
+        res.status(200).json({ message: "Product deleted successfully"});
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Failed to delete product" });
+    }
+});
+
 app.listen(process.env.PORT || port, () => {
-    console.log("REST API is listening.");
+    console.log("REST API is listening");
 });
 
 // TODO:
@@ -110,10 +127,12 @@ app.listen(process.env.PORT || port, () => {
 // post a new product to a user's catalog (CREATE NEW PRODUCTS) - done
 // link the new product form - done
 // link the inventory fetch - done
-// create a page component so that users can view an individual product's details
-// delete a user's product (DELETE USER PRODUCTS)
-// log out button on navbar that calls a logout function
 // new product schema to include SKU - done
+// delete a user's product (DELETE USER PRODUCTS) - done
 // create database sample data
+// log out button on navbar that calls a logout function
+// create a page component so that users can view an individual product's details
 // home page quick stats
+// flag items
 // card view
+// add comments to explain methods for future reference

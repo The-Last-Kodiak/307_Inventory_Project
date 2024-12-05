@@ -107,7 +107,6 @@ const Catalog = () => {
         setOverlayVisibility(!overlayVisibility);
     };
 
-
     const handleChange = (event) => {
         const { name, value } = event.target;
         setNewProduct(prevState => ({
@@ -115,7 +114,6 @@ const Catalog = () => {
             [name]: value
         }))
     };
-
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -159,6 +157,28 @@ const Catalog = () => {
             alert("An error occurred while adding the product. Please try again.");
         }
     };
+
+    const handleDelete = async (productId) => {
+        const token = localStorage.getItem("jwtToken");
+        try{
+            const res = await fetch(`https://307inventoryproject-a0f3f8g3dhcedrek.westus3-01.azurewebsites.net/catalog/${productId}`, {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`,
+                }
+            });
+            if(!res.ok) {
+                throw new Error("Failed to delete product");
+            }
+
+            setProductData((prevData) => prevData.filter((product) => product._id !== productId));
+            alert("Product deleted successfully");
+        } catch (error) {
+            console.error("Error deleting product:", error);
+            alert("An error occurred while deleting the product. Please try again");
+        }
+    };
     
     return (
         <div >
@@ -176,7 +196,7 @@ const Catalog = () => {
                 </div>
 
                 <div>
-                    {viewMode === 'table' ? <TableView productData={filteredData} /> : <CardView productData={filteredData} />}
+                    {viewMode === 'table' ? <TableView productData={filteredData} onDelete={handleDelete}/> : <CardView productData={filteredData} />}
                 </div>
 
                 {overlayVisibility && (

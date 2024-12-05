@@ -1,7 +1,10 @@
 import React from "react";
 import styles from "./Catalog.module.css"
 
-const TableView = ({ productData }) => {
+const TableView = ({ productData, onDelete }) => {
+    const handleDelete = (productId) => {
+        onDelete(productId)
+    }
     const TableHeader = () => {
         return (
             <thead className={styles.thead}>
@@ -18,19 +21,16 @@ const TableView = ({ productData }) => {
     const TableBody = () => {
         return (
             <tbody>
-                {productData.map((row) => (
-                    <tr key={row.sku}>
-                        <td>{row.sku}</td>
-                        <td>{row.name}</td>
-                        <td>{row.price}</td>
-                        <td>{row.qty}</td>
+                {productData.map((product) => (
+                    <tr key={product._id}>
+                        <td>{product.sku}</td>
+                        <td>{product.name}</td>
+                        <td>{product.price}</td>
+                        <td>{product.qty}</td>
                         <td>
                             <div className={styles.btnContainer}>
                                 <button className={`btn ${styles.btn}`}>View</button>
-                                <button className={`btn ${styles.btn}`}>Flag</button>
-                                {/* <button onClick={() => removeProduct(sku)}>
-                                    Delete
-                                </button> */}
+                                <button className={`btn ${styles.btn}`} onClick={() => handleDelete(product._id)}>Delete</button>
                             </div>
                         </td>
                     </tr>
