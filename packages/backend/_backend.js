@@ -34,7 +34,6 @@ app.get("/", (req, res) => {
 });
 
 app.post("/signup", async (req,res) => {
-    console.log("Attempting to sign up");
     const { username, password, email } = req.body;
 
     if(!username || !password || !email) {
@@ -42,14 +41,12 @@ app.post("/signup", async (req,res) => {
     }
 
     try{
-        console.log("trying to find existing user");
         const existingUser = await db.Models.User.findOne({ username });
         if (existingUser) {
             return res.status(400).json({ message: "Username already exists"});
         }
 
         const newUser = { username, password, email };
-        console.log("New user data:", newUser);
         await db.addUser(newUser);
 
         res.status(201).json({ message: "User registered successfully" });
@@ -103,11 +100,9 @@ app.post("/catalog", authenticate, async (req,res) => {
 });
 
 app.delete("/catalog/:productId", authenticate, async (req,res) => {
-    console.log("trying to remove product by id")
     const { productId } = req.params;
 
     try{
-        console.log("finding product")
         const product = await db.Models.Inventory.findOne({_id: productId, username: req.user.username });
         if(!product) {
             return res.status(404).json({ message: "Product not found or you don't have permission to delete it" });
@@ -126,17 +121,6 @@ app.listen(process.env.PORT || port, () => {
 });
 
 // TODO:
-// securely log a user in (FETCH USER) - done
-// get a user's catalog (FETCH USER INVENTORY) - done
-// link signup with signup page (CREATE NEW USER) - done
-// link login with login page - done
-// post a new product to a user's catalog (CREATE NEW PRODUCTS) - done
-// link the new product form - done
-// link the inventory fetch - done
-// new product schema to include SKU - done
-// delete a user's product (DELETE USER PRODUCTS) - done
-// create database sample data - done
-// test api locally
 // log out button on navbar that calls a logout function
 // create a page component so that users can view an individual product's details
 // home page quick stats

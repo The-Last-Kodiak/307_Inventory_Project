@@ -8,7 +8,6 @@ const SignUp = () => {
     const navigate = useNavigate();
 
     const signup = async (userData) => {
-        console.log("UserData: ",userData);
         const { email, username, password, confirmPassword } = userData;
         if(password !== confirmPassword){
             alert("Passwords do not match");
@@ -16,7 +15,6 @@ const SignUp = () => {
         }
 
         try{
-            console.log("trying to fetch");
             const res = await fetch(`http://localhost:8000/signup`, {
                 method: "POST",
                 headers: {

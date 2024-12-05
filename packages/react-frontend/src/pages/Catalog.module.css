@@ -69,7 +69,7 @@
     visibility: visible;
 }
 
-.overlay-content {
+.overlayContent {
     background: var(--secondary); 
     color: var(--text);
     padding: 30px 20px;
@@ -77,13 +77,13 @@
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
     max-width: 500px;
     width: 90%;
-    text-align: center;
 }
 
 .overlay h2 {
     font-size: 30px;
     margin-bottom: 20px;
     color: var(--primary);
+    text-align: center;
 }
 
 .overlay form {
@@ -99,17 +99,10 @@
 }
 
 .overlay .formgroup label {
+    display: block;
     margin-bottom: 5px;
-    font-weight: bold;
-}
-
-.overlay .formgroup input {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #aaa;
-    border-radius: 5px;
-    background: var(--background);
-    color: var(--text);
+    font-weight: bolder;
+    text-align: left;
 }
 
 .overlay .formgroup input::placeholder {
@@ -147,4 +140,19 @@
 
 .overlay .close-btn:hover {
     color: var(--primary);
+}
+
+.closeBtn{
+    width:40px;
+    font-size: 25px;
+    float:left;
+}
+
+.formgroupLabel{
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #aaa;
+    border-radius: 5px;
+    background: var(--background);
+    color: var(--text);
 }

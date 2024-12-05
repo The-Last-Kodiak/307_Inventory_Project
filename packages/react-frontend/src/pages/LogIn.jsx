@@ -12,7 +12,6 @@ const LogIn = ({ onLogin }) => {
 
     const handleAuth = async (userData) => {
         try {
-            console.log("Sending request with body:", JSON.stringify(userData));
             const res = await fetch(`http://localhost:8000/login`, {
                 method: "POST",
                 headers: {
@@ -36,9 +35,6 @@ const LogIn = ({ onLogin }) => {
     };
 
     const login = (userData) => {
-        // setUsername(userData.username);
-        // setPassword(userData.password);
-        console.log("Submitting user:", userData)
         handleAuth(userData);
     };
 

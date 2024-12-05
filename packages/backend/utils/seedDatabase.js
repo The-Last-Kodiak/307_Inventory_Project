@@ -1,9 +1,9 @@
 // backend/scripts/seedDatabase.js
 import mongoose from "mongoose";
-import bcrypt from "bcrypt"; // Add bcryptjs for hashing passwords
-import db from "../databaseSchema.js"; // Adjust the path based on your project structure
+import bcrypt from "bcrypt";
+import db from "../databaseSchema.js";
 
-// Sample users and inventory data
+
 const users = [
   {
     username: "john_doe",
@@ -27,7 +27,7 @@ const users = [
   },
 ];
 
-// Sample inventory data for each user
+
 const inventories = [
     {
       username: "john_doe",
@@ -137,10 +137,10 @@ const inventories = [
 ];
   
 
-// Function to hash passwords
+
 const hashPassword = async (password) => {
-  const salt = await bcrypt.genSalt(10); // Generate salt
-  const hashedPassword = await bcrypt.hash(password, salt); // Hash the password
+  const salt = await bcrypt.genSalt(10); 
+  const hashedPassword = await bcrypt.hash(password, salt);
   return hashedPassword;
 };
 

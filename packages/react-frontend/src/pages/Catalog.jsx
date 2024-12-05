@@ -144,7 +144,7 @@ const Catalog = () => {
             }
             
             const addedProduct = await res.json();
-            setProductData((prevData) => [...prevData, addedProduct]);
+            setProductData((prevData) => [...prevData, addedProduct.product]);
             alert("Product added successfully.");
 
             //reset form after submission
@@ -165,10 +165,8 @@ const Catalog = () => {
     };
 
     const handleDelete = async (productId) => {
-        console.log("Attempting to delete");
         const token = localStorage.getItem("jwtToken");
         try{
-            console.log("fetching");
             const res = await fetch(`http://localhost:8000/catalog/${productId}`, {
                 method: "DELETE",
                 headers: {
@@ -194,11 +192,11 @@ const Catalog = () => {
             <div className={styles.container}>
                 <div className={styles.filterbar}>
                     {/* add bar for filtering */}
-                    <button className={`btn ${styles.addBtn}`} onClick={toggleOverlay}></button>
-                    <button onClick={() => setSortCriteria('priceAsc')}>Sort by Price (Low to High)</button>
-                    <button onClick={() => setSortCriteria('priceDesc')}>Sort by Price (High to Low)</button>
-                    <button onClick={() => setSortCriteria('quantityAsc')}>Sort by Quantity (Low to High)</button>
-                    <button onClick={() => setSortCriteria('quantityDesc')}>Sort by Quantity (High to Low)</button>
+                    <button className={`btn ${styles.addBtn}`} onClick={toggleOverlay}>Add Product</button>
+                    <button className={`btn ${styles.filterBtn}`} onClick={() => setSortCriteria('priceAsc')}>Sort by Price (Low to High)</button>
+                    <button className={`btn ${styles.filterBtn}`} onClick={() => setSortCriteria('priceDesc')}>Sort by Price (High to Low)</button>
+                    <button className={`btn ${styles.filterBtn}`} onClick={() => setSortCriteria('quantityAsc')}>Sort by Quantity (Low to High)</button>
+                    <button className={`btn ${styles.filterBtn}`} onClick={() => setSortCriteria('quantityDesc')}>Sort by Quantity (High to Low)</button>
                     <button className={`btn ${styles.viewBtn}`} onClick={() => toggleView('table')}>Table View</button>
                     <button className={`btn ${styles.viewBtn}`} onClick={() => toggleView('card')}>Card View</button>
                 </div>
@@ -211,7 +209,7 @@ const Catalog = () => {
                     <div className={`${styles.overlay} ${styles.show}`}>
                         <div className={styles.overlayContent}>
                             <button
-                                className={styles.closeBtn}
+                                className={`btn ${styles.closeBtn}`}
                                 onClick={toggleOverlay}
                                 aria-label="Close overlay"
                             >
@@ -221,6 +219,7 @@ const Catalog = () => {
                             <form onSubmit={handleSubmit}>
                                 <label htmlFor="name">Product Name:</label>
                                 <input
+                                    className={`${styles.formgroupLabel}`}
                                     type="text"
                                     id="product_name"
                                     name="product_name"
@@ -231,6 +230,7 @@ const Catalog = () => {
 
                                 <label htmlFor="sku">SKU:</label>
                                 <input
+                                    className={`${styles.formgroupLabel}`}
                                     type="text"
                                     id="sku"
                                     name="sku"
@@ -241,6 +241,7 @@ const Catalog = () => {
 
                                 <label htmlFor="price">Price:</label>
                                 <input
+                                    className={`${styles.formgroupLabel}`}
                                     type="number"
                                     id="price"
                                     name="price"
@@ -251,6 +252,7 @@ const Catalog = () => {
 
                                 <label htmlFor="quantity">Quantity:</label>
                                 <input
+                                    className={`${styles.formgroupLabel}`}
                                     type="number"
                                     id="quantity"
                                     name="quantity"
@@ -261,6 +263,7 @@ const Catalog = () => {
 
                                 <label htmlFor="supplier">Supplier:</label>
                                 <input
+                                    className={`${styles.formgroupLabel}`}
                                     type="text"
                                     id="supplier"
                                     name="supplier"
@@ -271,6 +274,7 @@ const Catalog = () => {
 
                                 <label htmlFor="description">Description:</label>
                                 <input
+                                    className={`${styles.formgroupLabel}`}
                                     type="text"
                                     id="description"
                                     name="description"
