@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "./Catalog.module.css"
 
-const TableView = ({ productData, onDelete }) => {
+const TableView = ({ productData, onDelete, handleClick }) => {
     const handleDelete = (productId) => {
         onDelete(productId);
     };
@@ -29,7 +29,7 @@ const TableView = ({ productData, onDelete }) => {
                         <td>{product.quantity}</td>
                         <td>
                             <div className={styles.btnContainer}>
-                                <button className={`btn ${styles.btn}`}>View</button>
+                                <button className={`btn ${styles.btn}`} onClick={() => handleClick(product)}>Edit</button>
                                 <button className={`btn ${styles.btn}`} onClick={() => handleDelete(product._id)}>Delete</button>
                             </div>
                         </td>

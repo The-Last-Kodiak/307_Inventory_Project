@@ -8,7 +8,6 @@ import * as jwt_decode from "jwt-decode";
 
 
 const Catalog = () => {
-    const [viewMode, setViewMode] = useState('table');
     const [productData, setProductData] = useState([]);
     const [overlayVisibility, setOverlayVisibility] = useState(false);
     const [newProduct, setNewProduct] = useState({
@@ -21,6 +20,8 @@ const Catalog = () => {
     });
     const [filteredData, setFilteredData] = useState([]);
     const [sortCriteria, setSortCriteria] = useState(null); 
+    const [selectedProduct, setSelectedProduct] = useState(null);
+    const [editingProduct, setEditingProduct] = useState(null);
 
     // fetch productData from api
     useEffect(() => {
@@ -31,7 +32,7 @@ const Catalog = () => {
         const fetchProducts = async () => {
             try {
                 const token = localStorage.getItem('jwtToken');
-                const res = await fetch(`http://localhost:8000/catalog`, { 
+                const res = await fetch(`https://307inventoryproject-a0f3f8g3dhcedrek.westus3-01.azurewebsites.net/catalog`, { 
                     signal,
                     headers: {
                         "Authorization": `Bearer ${token}`
@@ -97,13 +98,10 @@ const Catalog = () => {
         }
         return sortedData;
     };
-    
-    const toggleView = (mode) =>{
-        setViewMode(mode);
-    };
 
     const toggleOverlay = () => {
         setOverlayVisibility(!overlayVisibility);
+        setEditingProduct(null);
     };
 
     const handleChange = (event) => {
@@ -129,7 +127,7 @@ const Catalog = () => {
 
         try {
             const res = await fetch(
-                `http://localhost:8000/catalog`,
+                `https://307inventoryproject-a0f3f8g3dhcedrek.westus3-01.azurewebsites.net/catalog`,
                 {
                     method: "POST",
                     headers: {
@@ -167,7 +165,7 @@ const Catalog = () => {
     const handleDelete = async (productId) => {
         const token = localStorage.getItem("jwtToken");
         try{
-            const res = await fetch(`http://localhost:8000/catalog/${productId}`, {
+            const res = await fetch(`https://307inventoryproject-a0f3f8g3dhcedrek.westus3-01.azurewebsites.net/catalog/${productId}`, {
                 method: "DELETE",
                 headers: {
                     "Content-Type": "application/json",
@@ -185,111 +183,263 @@ const Catalog = () => {
             alert("An error occurred while deleting the product. Please try again");
         }
     };
+
+    const handleProductClick = (product) => {
+        setSelectedProduct(product);
+        setEditingProduct(product);
+        toggleOverlay();
+    };
+
+    const handleEditChange = (event) => {
+        const { name, value } = event.target;
+        setEditingProduct(prevState => ({
+            ...prevState,
+            [name]: value
+        }));
+    };
+
+    const handleSubmitEdit = async (event) => {
+        event.preventDefault();
+
+        const token = localStorage.getItem("jwtToken");
+        if (!token) {
+            alert("You must be logged in to edit products");
+            return;
+        }
+
+        try {
+            const res = await fetch(
+                `https://307inventoryproject-a0f3f8g3dhcedrek.westus3-01.azurewebsites.net/catalog/${editingProduct._id}`,
+                {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${token}`,
+                    },
+                    body: JSON.stringify(editingProduct),
+                }
+            );
+            if (!res.ok) {
+                throw new Error("Failed to update product");
+            }
+
+            const updatedProduct = await res.json();
+            setProductData((prevData) =>
+                prevData.map((product) =>
+                    product._id === updatedProduct.product._id ? updatedProduct.product : product
+                )
+            );
+            alert("Product updated successfully.");
+            toggleOverlay();
+        } catch (error) {
+            console.error("Error submitting product update:", error);
+            alert("An error occurred while updating the product. Please try again.");
+        }
+    };
     
     return (
         <div >
             <Navbar/>
-            <div className={styles.container}>
-                <div className={styles.filterbar}>
-                    {/* add bar for filtering */}
-                    <button className={`btn ${styles.addBtn}`} onClick={toggleOverlay}>Add Product</button>
-                    <button className={`btn ${styles.filterBtn}`} onClick={() => setSortCriteria('priceAsc')}>Sort by Price (Low to High)</button>
-                    <button className={`btn ${styles.filterBtn}`} onClick={() => setSortCriteria('priceDesc')}>Sort by Price (High to Low)</button>
-                    <button className={`btn ${styles.filterBtn}`} onClick={() => setSortCriteria('quantityAsc')}>Sort by Quantity (Low to High)</button>
-                    <button className={`btn ${styles.filterBtn}`} onClick={() => setSortCriteria('quantityDesc')}>Sort by Quantity (High to Low)</button>
-                    <button className={`btn ${styles.viewBtn}`} onClick={() => toggleView('table')}>Table View</button>
-                    <button className={`btn ${styles.viewBtn}`} onClick={() => toggleView('card')}>Card View</button>
-                </div>
-
-                <div>
-                    {viewMode === 'table' ? <TableView productData={filteredData} onDelete={handleDelete}/> : <CardView productData={filteredData} />}
-                </div>
-
-                {overlayVisibility && (
-                    <div className={`${styles.overlay} ${styles.show}`}>
-                        <div className={styles.overlayContent}>
-                            <button
-                                className={`btn ${styles.closeBtn}`}
-                                onClick={toggleOverlay}
-                                aria-label="Close overlay"
-                            >
-                                &times;
-                            </button>
-                            <h2>Add New Product</h2>
-                            <form onSubmit={handleSubmit}>
-                                <label htmlFor="name">Product Name:</label>
-                                <input
-                                    className={`${styles.formgroupLabel}`}
-                                    type="text"
-                                    id="product_name"
-                                    name="product_name"
-                                    value={newProduct.product_name}
-                                    onChange={handleChange}
-                                    required
-                                />
-
-                                <label htmlFor="sku">SKU:</label>
-                                <input
-                                    className={`${styles.formgroupLabel}`}
-                                    type="text"
-                                    id="sku"
-                                    name="sku"
-                                    value={newProduct.sku}
-                                    onChange={handleChange}
-                                    required
-                                />
-
-                                <label htmlFor="price">Price:</label>
-                                <input
-                                    className={`${styles.formgroupLabel}`}
-                                    type="number"
-                                    id="price"
-                                    name="price"
-                                    value={newProduct.price}
-                                    onChange={handleChange}
-                                    required
-                                />
-
-                                <label htmlFor="quantity">Quantity:</label>
-                                <input
-                                    className={`${styles.formgroupLabel}`}
-                                    type="number"
-                                    id="quantity"
-                                    name="quantity"
-                                    value={newProduct.quantity}
-                                    onChange={handleChange}
-                                    required
-                                />
-
-                                <label htmlFor="supplier">Supplier:</label>
-                                <input
-                                    className={`${styles.formgroupLabel}`}
-                                    type="text"
-                                    id="supplier"
-                                    name="supplier"
-                                    value={newProduct.supplier}
-                                    onChange={handleChange}
-                                    required
-                                />
-
-                                <label htmlFor="description">Description:</label>
-                                <input
-                                    className={`${styles.formgroupLabel}`}
-                                    type="text"
-                                    id="description"
-                                    name="description"
-                                    value={newProduct.description}
-                                    onChange={handleChange}
-                                    required
-                                />
-
-                                <button type="submit" className={styles.btn}>Add Product</button>
-                                <button type="button" className={styles.btn} onClick={toggleOverlay}>Cancel</button>
-                            </form>
-                        </div>
+            {selectedProduct ? ( <ProductDetails product={selectedProduct} onBack={toggleOverlay} />) : (
+                <div className={styles.container}>
+                    <div className={styles.filterbar}>
+                        <button className={`btn ${styles.addBtn}`} onClick={toggleOverlay}>Add Product</button>
+                        <button className={`btn ${styles.filterBtn}`} onClick={() => setSortCriteria('priceAsc')}>Sort by Price (Low to High)</button>
+                        <button className={`btn ${styles.filterBtn}`} onClick={() => setSortCriteria('priceDesc')}>Sort by Price (High to Low)</button>
+                        <button className={`btn ${styles.filterBtn}`} onClick={() => setSortCriteria('quantityAsc')}>Sort by Quantity (Low to High)</button>
+                        <button className={`btn ${styles.filterBtn}`} onClick={() => setSortCriteria('quantityDesc')}>Sort by Quantity (High to Low)</button>
                     </div>
-                )}
-            </div>
+
+                    <div>
+                        <TableView productData={filteredData} onDelete={handleDelete} handleClick={handleProductClick}/>
+                    </div>
+
+                    {overlayVisibility && (
+                        <div className={`${styles.overlay} ${styles.show}`}>
+                            <div className={styles.overlayContent}>
+                                <button
+                                    className={`btn ${styles.closeBtn}`}
+                                    onClick={toggleOverlay}
+                                    aria-label="Close overlay"
+                                >
+                                    &times;
+                                </button>
+
+                                {editingProduct ? (
+                                    <>
+                                        <h2>Edit Product</h2>
+                                        <form onSubmit={handleSubmitEdit}>
+                                            <div className="formgroup">
+
+                                                <label htmlFor="product_name">Product Name:</label>
+                                                <input
+                                                    type="text"
+                                                    id="product_name"
+                                                    name="product_name"
+                                                    value={editingProduct.product_name}
+                                                    onChange={handleEditChange}
+                                                    required
+                                                />
+                                            </div>
+                                            <div className="formgroup">
+
+                                                <label htmlFor="sku">SKU:</label>
+                                                <input
+                                                    type="text"
+                                                    id="sku"
+                                                    name="sku"
+                                                    value={editingProduct.sku}
+                                                    onChange={handleEditChange}
+                                                    required
+                                                />
+                                            </div>
+                                            <div className="formgroup">
+
+                                                <label htmlFor="price">Price:</label>
+                                                <input
+                                                    type="number"
+                                                    id="price"
+                                                    name="price"
+                                                    value={editingProduct.price}
+                                                    onChange={handleEditChange}
+                                                    required
+                                                />
+                                            </div>
+                                            <div className="formgroup">
+
+                                                <label htmlFor="quantity">Quantity:</label>
+                                                <input
+                                                    type="number"
+                                                    id="quantity"
+                                                    name="quantity"
+                                                    value={editingProduct.quantity}
+                                                    onChange={handleEditChange}
+                                                    required
+                                                />
+                                            </div>
+                                            <div className="formgroup">
+
+                                                <label htmlFor="supplier">Supplier:</label>
+                                                <input
+                                                    type="text"
+                                                    id="supplier"
+                                                    name="supplier"
+                                                    value={editingProduct.supplier}
+                                                    onChange={handleEditChange}
+                                                    required
+                                                />
+                                            </div>
+                                            <div className="formgroup">
+
+                                                <label htmlFor="description">Description:</label>
+                                                <input
+                                                    type="text"
+                                                    id="description"
+                                                    name="description"
+                                                    value={editingProduct.description}
+                                                    onChange={handleEditChange}
+                                                    required
+                                                />
+                                            </div>
+                                            <button type="submit" className={styles.btn}>Save Changes</button>
+                                            <button type="button" className={styles.btn} onClick={toggleOverlay}>Cancel</button>
+                                        </form>
+                                    </>
+                                ) : (
+                                    <>
+                                        <h2>Add New Product</h2>
+                                        <form onSubmit={handleSubmit}>
+                                            <div className="formgroup">
+
+                                                <label htmlFor="name">Product Name:</label>
+                                                <input
+                                                    className={`${styles.formgroupLabel}`}
+                                                    type="text"
+                                                    id="product_name"
+                                                    name="product_name"
+                                                    value={newProduct.product_name}
+                                                    onChange={handleChange}
+                                                    required
+                                                />
+                                            </div>
+                                            <div className="formgroup">
+
+                                                <label htmlFor="sku">SKU:</label>
+                                                <input
+                                                    className={`${styles.formgroupLabel}`}
+                                                    type="text"
+                                                    id="sku"
+                                                    name="sku"
+                                                    value={newProduct.sku}
+                                                    onChange={handleChange}
+                                                    required
+                                                />
+                                            </div>
+                                            <div className="formgroup">
+
+                                                <label htmlFor="price">Price:</label>
+                                                <input
+                                                    className={`${styles.formgroupLabel}`}
+                                                    type="number"
+                                                    id="price"
+                                                    name="price"
+                                                    value={newProduct.price}
+                                                    onChange={handleChange}
+                                                    required
+                                                />
+                                            </div>
+
+                                            <div className="formgroup">
+
+                                                <label htmlFor="quantity">Quantity:</label>
+                                                <input
+                                                    className={`${styles.formgroupLabel}`}
+                                                    type="number"
+                                                    id="quantity"
+                                                    name="quantity"
+                                                    value={newProduct.quantity}
+                                                    onChange={handleChange}
+                                                    required
+                                                />
+                                            </div>
+
+                                            <div className="formgroup">
+
+                                                <label htmlFor="supplier">Supplier:</label>
+                                                <input
+                                                    className={`${styles.formgroupLabel}`}
+                                                    type="text"
+                                                    id="supplier"
+                                                    name="supplier"
+                                                    value={newProduct.supplier}
+                                                    onChange={handleChange}
+                                                    required
+                                                />
+                                            </div>
+
+                                            <div className="formgroup">
+
+                                                <label htmlFor="description">Description:</label>
+                                                <input
+                                                    className={`${styles.formgroupLabel}`}
+                                                    type="text"
+                                                    id="description"
+                                                    name="description"
+                                                    value={newProduct.description}
+                                                    onChange={handleChange}
+                                                    required
+                                                />
+                                            </div>
+
+                                            <button type="submit" className={styles.btn}>Add Product</button>
+                                            <button type="button" className={styles.btn} onClick={toggleOverlay}>Cancel</button>
+                                        </form>
+                                    </>
+                                )}
+                            </div>
+                        </div>
+                    )}
+                </div>)}
         </div>
     );
 };
