@@ -5,7 +5,6 @@ import cors from "cors";
 import dotenv from "dotenv";
 import { generateToken } from "./utils/jwt.js";
 import { authenticate } from "./utils/authMiddleware.js";
-import e from "express";
 
 dotenv.config();
 const app = express();
@@ -84,15 +83,37 @@ app.get("/catalog", authenticate, async (req,res) => {
     }
 });
 
+app.post("/catalog", authenticate, async (req,res) => {
+    const { product_name, price, quantity, supplier, description, sku } = req.body;
+    if (!product_name || !price || !quantity || !sku) {
+        return res.status(400).json({ message: "Product name, price, quantity, and sku are required" });
+    }
+
+    try{
+        const product = { product_name, price, quantity, supplier, description, sku, username: req.user.username };
+        const newProduct = await db.addProduct(product);
+        res.status(201).json({ message: "Product added successfully" , product: newProduct})
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Failed to add product"});
+    }
+});
+
 app.listen(process.env.PORT || port, () => {
     console.log("REST API is listening.");
 });
 
 // TODO:
-// securely log a user in
-// get a user's catalog
-// link signup with signup page (CREATE NEW USER)
-// post a new product to a user's catalog (CREATE NEW PRODUCTS)
-// delete a user's product (DELETE USER PRODUCTS)
+// securely log a user in (FETCH USER) - done
+// get a user's catalog (FETCH USER INVENTORY) - done
+// link signup with signup page (CREATE NEW USER) - done
+// post a new product to a user's catalog (CREATE NEW PRODUCTS) - done
+// link the new product form - done
+// link the inventory fetch - done
 // create a page component so that users can view an individual product's details
+// delete a user's product (DELETE USER PRODUCTS)
+// log out button on navbar that calls a logout function
+// new product schema to include SKU - done
+// create database sample data
 // home page quick stats
+// card view
