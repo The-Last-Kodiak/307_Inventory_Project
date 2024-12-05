@@ -103,9 +103,17 @@ const Catalog = () => {
         setTest(!test);
     }
 
-    const toggleOverlay = () => {
+    const toggleOverlay = (clearEditing = true) => {
         setOverlayVisibility(!overlayVisibility);
-        setEditingProduct(null);
+        if (clearEditing) {
+            setEditingProduct(null);
+        }
+    };
+
+    const openOverlayForEditing = (product) => {
+        setSelectedProduct(product);
+        setEditingProduct(product);
+        setOverlayVisibility(true);
     };
 
     const handleChange = (event) => {
@@ -188,12 +196,7 @@ const Catalog = () => {
         }
     };
 
-    const handleProductClick = (product) => {
-        setSelectedProduct(product);
-        setEditingProduct(product);
-        toggleTest();
-        toggleOverlay();
-    };
+    const handleProductClick = (product) => openOverlayForEditing(product);
 
     const handleEditChange = (event) => {
         const { name, value } = event.target;
