@@ -8,19 +8,19 @@ dotenv.config();
 mongoose.set("debug", true);
 const SALT_ROUNDS = 10;
 
-// mongoose
-//   .connect(process.env.MONGODB_URI, {
-//     useNewUrlParser: true,
-//     useUnifiedTopology: true,
-//   })
-//   .catch((error) => console.log(error));
-
 mongoose
-  .connect("mongodb://127.0.0.1:27017/SupplyHub", {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
+  .connect(process.env.MONGODB_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
   })
   .catch((error) => console.log(error));
+
+// mongoose
+//   .connect("mongodb://127.0.0.1:27017/SupplyHub", {
+//       useNewUrlParser: true,
+//       useUnifiedTopology: true,
+//   })
+//   .catch((error) => console.log(error));
 
 async function addUser(user) {
   try{

@@ -12,7 +12,7 @@ const LogIn = ({ onLogin }) => {
 
     const handleAuth = async (userData) => {
         try {
-            const res = await fetch(`http://localhost:8000/login`, {
+            const res = await fetch(`https://307inventoryproject-a0f3f8g3dhcedrek.westus3-01.azurewebsites.net/login`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"

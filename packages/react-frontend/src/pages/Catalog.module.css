@@ -105,6 +105,15 @@
     text-align: left;
 }
 
+.overlay .formgroup input{
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #aaa;
+    border-radius: 5px;
+    background: var(--background);
+    color: var(--text);
+}
+
 .overlay .formgroup input::placeholder {
     color: #aaa; 
 }
@@ -148,11 +157,3 @@
     float:left;
 }
 
-.formgroupLabel{
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #aaa;
-    border-radius: 5px;
-    background: var(--background);
-    color: var(--text);
-}

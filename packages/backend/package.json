@@ -7,7 +7,7 @@
     "lint": "npx eslint . && npx prettier --check .",
     "test": "echo \"Error: no test specified\" && exit 0",
     "start": "node backend.js",
-    "dev": "nodemon _backend.js",
+    "dev": "nodemon backend.js",
     "seed": "node utils/seedDatabase.js"
   },
   "author": "",

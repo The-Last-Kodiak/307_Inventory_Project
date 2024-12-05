@@ -15,7 +15,7 @@ const SignUp = () => {
         }
 
         try{
-            const res = await fetch(`http://localhost:8000/signup`, {
+            const res = await fetch(`https://307inventoryproject-a0f3f8g3dhcedrek.westus3-01.azurewebsites.net/signup`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

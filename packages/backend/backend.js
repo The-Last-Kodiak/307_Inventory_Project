@@ -1,7 +1,10 @@
+// backend/backend.js
 import express from "express";
 import db from "./dbFunctions.js";
 import cors from "cors";
 import dotenv from "dotenv";
+import { generateToken } from "./utils/jwt.js";
+import { authenticate } from "./utils/authMiddleware.js";
 
 dotenv.config();
 const app = express();
@@ -24,243 +27,136 @@ const corsOptions = {
   },
   credentials: true,
 };
-app.use(cors());
+app.use(cors(corsOptions));
 
 app.get("/", (req, res) => {
-  res.send("Welcome to The StockHub API");
+    res.send("Welcome to the SupplyHub API");
 });
 
-//shows all users in database given the correct password
-//Temorary to see database
-app.get("/users", (req, res) => {
-  const password = req.query.password;
-  if (password == "123456789") {
-    let users = db.getUsers();
-    users
-      .then((u) => {
-        res.send(u);
-      })
-      .catch((error) => {
-        console.log(error);
-        res.status(500).send();
-      });
-  } else {
-    res.status(403).send("Wrong Password");
-  }
-});
+app.post("/signup", async (req,res) => {
+    const { username, password, email } = req.body;
 
-//sign up function that directly adds to local mongoodb database
-//checks for duplicate usernames to prevent duplicate accounts
-app.post("/signup", (req, res) => {
-  //gets account info given
-  const account_name = req.body[0].username;
-  const password = req.body[0].password;
-  const account = {
-    username: account_name,
-    password: password,
-  };
+    if(!username || !password || !email) {
+        return res.status(400).json({ message: "Please provide all required fields"});
+    }
 
-  //gets users in database, check for duplicate accounts
-  db.getUsers()
-    .then((accounts) => {
-      //checks if account already exists
-      for (let i = 0; i < accounts.length; i++) {
-        if (accounts[i].username == account_name) {
-          //case where username already exists
-          res.status(400).send("Account already exists");
-          return;
+    try{
+        const existingUser = await db.Models.User.findOne({ username });
+        if (existingUser) {
+            return res.status(400).json({ message: "Username already exists"});
         }
-      }
 
-      //adds user to database
-      let promise = db.addUser(account);
-      promise
-          .then((newUser) => {
-                  //returns new account info
-          res.status(201).send(newUser);
-        })
-        .catch((error) => {
-          console.log(error);
-          res.status(500).send();
-        });
+        const newUser = { username, password, email };
+        await db.addUser(newUser);
 
-    })
-    .catch((error) => {
-      console.log(error);
-      res.status(500).send();
-    });
-});
-
-// takes in a 1 json object that contains username, password and all attributes of a Prodct except for quantity(=0)
-// adds the product to the local database and returns it
-// checks for proper login info(username and password) and inputs
-app.post("/inventory", (req, res) => {
-  //checks if quantity was given and sets it
-  let quantity;
-  if (req.body[0].quantity === undefined) {
-    quantity = 0;
-  } else {
-    quantity = req.body[0].quantity;
-  }
-
-  //takes json object and puts it in correct format for login and product creation
-  const product = {
-    username: req.body[0].username,
-    password: req.body[0].password,
-    product_name: req.body[0].product_name,
-    price: req.body[0].price,
-    quantity: quantity,
-    supplier: req.body[0].supplier,
-    description: req.body[0].description,
-    sku: req.body[0].sku,
-    };
-
-  //checks login information by using getUser
-  if (product.username === undefined || product.password === undefined) {
-    return res.status(400).send("No username or passowrd");
-  } else {
-      db.getUser(product, (err, password_res) => {
-          if (password_res) {
-              //Checks if product already exists by product_name
-              let duplicate = db.getProduct(product);
-
-              duplicate.then((u) => {
-                      if (u.length >= 1) {
-                          console.log(u);
-                          res.status(400).send("product already exists, try a different name");
-                      } else {
-                          //adds product to MongoDB
-                          let promise = db.addProduct(product);
-                          promise
-                              .then((newProduct) => {
-                                  res.status(201).send(newProduct);
-                              })
-                              .catch((error) => {
-                                  console.log(error);
-                                  res
-                                      .status(400)
-                                      .send(
-                                          "product_name, price, quantity, supplier, description, or sku fields aren't filled",
-                                      );
-                              });  
-                      }
-                  })
-                  .catch((error) => {
-                      console.log(error);
-                  });
-          } else {
-              res.status(400).send("Invalid username or password");
-          }
-      });
+        res.status(201).json({ message: "User registered successfully" });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Internal server error" });
     }
 });
 
-//gets all products given a username asociated with it and password for login validation
-// take in username and password by query since it is a GET api call
-app.get("/inventory", (req, res) => {
-    //sets username and password
-    const user = {
-        username: req.query.username,
-        password: req.query.password,
-    };
+app.post("/login", async (req, res) => {
+    const { username, password } = req.body;
 
-    //searches for user given the username and password
-    if (user.username === undefined || user.password === undefined) {
-        return res.status(400).send("No username or passowrd");
-    } else {
-        db.getUser(user, (err, password_res) => {
-            if (password_res) {
-                //gets and returns the products ascosiated with the username
-                let inventory = db.getProducts(user);
-                inventory
-                    .then((i) => {
-                        res.send(i);
-                    })
-                    .catch((error) => {
-                        console.log(error);
-                        res.status(500).send("Internal Server Error");
-                    });
-            } else {
-                res.status(400).send("Invalid username or password");
-            }
-        });
+    try {
+        const user = await db.getUser({ username, password });
+        if(!user) {
+            return res.status(401).json({ message: "Invalid username or password" });
+        }
+
+        const token = generateToken(user);
+        res.status(200).json({ token });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Server error" });
     }
 });
 
-// deletes a product given username, password and product name in the body
-app.delete("/inventory", (req, res) => {
-
-  //takes json object and puts it in correct format for login and product deletion
-  const product = {
-    username: req.body[0].username,
-    password: req.body[0].password,
-    product_name: req.body[0].product_name
-  };
-
-  //searches for user given the username and password
-  if (product.username === undefined || product.password === undefined) {
-    return res.status(400).send("No username or passowrd");
-  } else {
-      db.getUser(product, (err, password_res) => {
-          if (password_res) {
-
-              //deletes the product using all the parameters specified
-              let deletedProduct = db.deleteProduct(product);
-              deletedProduct
-                  .then((q) => {
-                      res.status(204).send(q);
-                  })
-                  .catch((error) => {
-                      console.log(error);
-                      res.status(500).send();
-                  });
-              //
-          } else {
-              res.status(400).send("Invalid username or password");
-          }
-      });
-  }
+app.get("/catalog", authenticate, async (req,res) => {
+    try{
+        const inventory = await db.getProducts({ username: req.user.username });
+        res.status(200).json(inventory);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Server error"});
+    }
 });
 
-app.put("/inventory", (req, res) => {
+app.post("/catalog", authenticate, async (req,res) => {
+    const { product_name, price, quantity, supplier, description, sku } = req.body;
+    if (!product_name || !price || !quantity || !sku) {
+        return res.status(400).json({ message: "Product name, price, quantity, and sku are required" });
+    }
 
-    //takes json object and puts it in correct format for login and product update
-    const product = {
-        username: req.body[0].username,
-        password: req.body[0].password,
-        product_name: req.body[0].product_name,
-        price: req.body[0].price,
-        quantity: req.body[0].quantity,
-        supplier: req.body[0].supplier,
-        description: req.body[0].description,
-        sku: req.body[0].sku,
-    };
+    try{
+        const product = { product_name, price, quantity, supplier, description, sku, username: req.user.username };
+        const newProduct = await db.addProduct(product);
+        res.status(201).json({ message: "Product added successfully" , product: newProduct})
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Failed to add product"});
+    }
+});
 
-    //searches for user given the username and password
-    if (product.username === undefined || product.password === undefined) {
-        return res.status(400).send("No username or passowrd");
-    } else {
-        db.getUser(product, (err, password_res) => {
-            if (password_res) {
+app.delete("/catalog/:productId", authenticate, async (req,res) => {
+    const { productId } = req.params;
 
-                //updates the product using all the parameters specified
-                let update = db.updateProduct(product);
-                update
-                    .then((q) => {
-                        res.status(204).send(q);
-                    })
-                    .catch((error) => {
-                        console.log(error);
-                        res.status(500).send();
-                    });
-                //
-            } else {
-                res.status(400).send("Invalid username or password");
-            }
-        });
+    try{
+        const product = await db.Models.Inventory.findOne({_id: productId, username: req.user.username });
+        if(!product) {
+            return res.status(404).json({ message: "Product not found or you don't have permission to delete it" });
+        }
+
+        await db.Models.Inventory.deleteOne({_id: productId });
+        res.status(200).json({ message: "Product deleted successfully"});
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Failed to delete product" });
+    }
+});
+
+app.put("/catalog/:productId", authenticate, async (req, res) => {
+    const { productId } = req.params;
+    const { product_name, price, quantity, supplier, description, sku } = req.body;
+
+    if (!product_name || !price || !quantity || !sku) {
+        return res.status(400).json({ message: "Product name, price, quantity, and sku are required" });
+    }
+
+    try {
+        const product = await db.Models.Inventory.findOne({ _id: productId, username: req.user.username });
+        
+        if (!product) {
+            return res.status(404).json({ message: "Product not found or you don't have permission to edit it" });
+        }
+
+        product.product_name = product_name;
+        product.price = price;
+        product.quantity = quantity;
+        product.supplier = supplier;
+        product.description = description;
+        product.sku = sku;
+
+        await product.save();
+
+        res.status(200).json({ message: "Product updated successfully", product });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Failed to update product" });
     }
 });
 
 app.listen(process.env.PORT || port, () => {
-  console.log("REST API is listening.");
+    console.log("REST API is listening");
 });
+
+// TODO:
+// create a page component so that users can view an individual product's details
+// home page quick stats
+// flag items
+// replace backend with _backend
+// switch mongo uri in dbfunctions
+// test on build
+// card view
+// add comments to explain methods for future reference
