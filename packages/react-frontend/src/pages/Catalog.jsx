@@ -267,7 +267,7 @@ const Catalog = () => {
                                     <>
                                         <h2>Edit Product</h2>
                                         <form onSubmit={handleSubmitEdit}>
-                                            <div className="formgroup">
+                                            <div className={`${styles.formgroup}`}>
 
                                                 <label htmlFor="product_name">Product Name:</label>
                                                 <input
@@ -279,7 +279,7 @@ const Catalog = () => {
                                                     required
                                                 />
                                             </div>
-                                            <div className="formgroup">
+                                            <div className={`${styles.formgroup}`}>
 
                                                 <label htmlFor="sku">SKU:</label>
                                                 <input
@@ -291,7 +291,7 @@ const Catalog = () => {
                                                     required
                                                 />
                                             </div>
-                                            <div className="formgroup">
+                                            <div className={`${styles.formgroup}`}>
 
                                                 <label htmlFor="price">Price:</label>
                                                 <input
@@ -303,7 +303,7 @@ const Catalog = () => {
                                                     required
                                                 />
                                             </div>
-                                            <div className="formgroup">
+                                            <div className={`${styles.formgroup}`}>
 
                                                 <label htmlFor="quantity">Quantity:</label>
                                                 <input
@@ -315,7 +315,7 @@ const Catalog = () => {
                                                     required
                                                 />
                                             </div>
-                                            <div className="formgroup">
+                                            <div className={`${styles.formgroup}`}>
 
                                                 <label htmlFor="supplier">Supplier:</label>
                                                 <input
@@ -327,7 +327,7 @@ const Catalog = () => {
                                                     required
                                                 />
                                             </div>
-                                            <div className="formgroup">
+                                            <div className={`${styles.formgroup}`}>
 
                                                 <label htmlFor="description">Description:</label>
                                                 <input
@@ -347,7 +347,7 @@ const Catalog = () => {
                                     <>
                                         <h2>Add New Product</h2>
                                         <form onSubmit={handleSubmit}>
-                                            <div className="formgroup">
+                                            <div className={`${styles.formgroup}`}>
 
                                                 <label htmlFor="name">Product Name:</label>
                                                 <input
@@ -360,7 +360,7 @@ const Catalog = () => {
                                                     required
                                                 />
                                             </div>
-                                            <div className="formgroup">
+                                            <div className={`${styles.formgroup}`}>
 
                                                 <label htmlFor="sku">SKU:</label>
                                                 <input
@@ -373,7 +373,7 @@ const Catalog = () => {
                                                     required
                                                 />
                                             </div>
-                                            <div className="formgroup">
+                                            <div className={`${styles.formgroup}`}>
 
                                                 <label htmlFor="price">Price:</label>
                                                 <input
@@ -387,7 +387,7 @@ const Catalog = () => {
                                                 />
                                             </div>
 
-                                            <div className="formgroup">
+                                            <div className={`${styles.formgroup}`}>
 
                                                 <label htmlFor="quantity">Quantity:</label>
                                                 <input
@@ -401,7 +401,7 @@ const Catalog = () => {
                                                 />
                                             </div>
 
-                                            <div className="formgroup">
+                                            <div className={`${styles.formgroup}`}>
 
                                                 <label htmlFor="supplier">Supplier:</label>
                                                 <input
@@ -415,7 +415,7 @@ const Catalog = () => {
                                                 />
                                             </div>
 
-                                            <div className="formgroup">
+                                            <div className={`${styles.formgroup}`}>
 
                                                 <label htmlFor="description">Description:</label>
                                                 <input
