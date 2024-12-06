@@ -12,7 +12,7 @@ const LogIn = ({ onLogin }) => {
 
     const handleAuth = async (userData) => {
         try {
-            const res = await fetch(`http://localhost:8000/login`, {
+            const res = await fetch(`${url}/login`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"

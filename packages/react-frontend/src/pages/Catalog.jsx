@@ -4,6 +4,8 @@ import Navbar from '../components/Navbar';
 import TableView from './TableView';
 import styles from './Catalog.module.css';
 import * as jwt_decode from "jwt-decode";
+const url = `https://307inventoryproject-a0f3f8g3dhcedrek.westus3-01.azurewebsites.net`
+// const url = `http://localhost:8000/`
 
 
 const Catalog = () => {
@@ -32,7 +34,7 @@ const Catalog = () => {
         const fetchProducts = async () => {
             try {
                 const token = localStorage.getItem('jwtToken');
-                const res = await fetch(`http://localhost:8000/catalog`, { 
+                const res = await fetch(`${url}/catalog`, { 
                     signal,
                     headers: {
                         "Authorization": `Bearer ${token}`
@@ -139,7 +141,7 @@ const Catalog = () => {
 
         try {
             const res = await fetch(
-                `http://localhost:8000/catalog`,
+                `${url}/catalog`,
                 {
                     method: "POST",
                     headers: {
@@ -177,7 +179,7 @@ const Catalog = () => {
     const handleDelete = async (productId) => {
         const token = localStorage.getItem("jwtToken");
         try{
-            const res = await fetch(`http://localhost:8000/catalog/${productId}`, {
+            const res = await fetch(`${url}/catalog/${productId}`, {
                 method: "DELETE",
                 headers: {
                     "Content-Type": "application/json",
@@ -217,7 +219,7 @@ const Catalog = () => {
 
         try {
             const res = await fetch(
-                `http://localhost:8000/catalog/${editingProduct._id}`,
+                `${url}/catalog/${editingProduct._id}`,
                 {
                     method: "PUT",
                     headers: {
