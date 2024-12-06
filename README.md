@@ -18,11 +18,21 @@ https://307inventoryproject-a0f3f8g3dhcedrek.westus3-01.azurewebsites.net/
 
 
 
-## Contributing
+## Development environment setup
 
 To set up the project locally, create a `.env` file in the `backend` directory with the following format:
 Don't forget to npm install dotenv in your backend folder. Place .env in your backend folder
 Change localhost:8000 on the frontend to the web link
 
+To run, first run "npm run dev" in the packages/backend folder to start the backend, then also run "npm run dev"
+at the root or packages/frontend where you can test the frontend by opening "http://localhost:5173" in a web browser
+- Note: both frontend and and backend are still connecting to the online webservice and database respectivly as opposed to local ones.
+
+
+### env file contents
 ```plaintext
 MONGODB_URI=mongodb+srv://username:password@cluster0.ofzol.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
+VALID_ORIGINS = http://localhost:5173
+```
+
+
