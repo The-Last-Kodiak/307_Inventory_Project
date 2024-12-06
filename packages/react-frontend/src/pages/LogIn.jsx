@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import LogInForm from "./LogInForm";
 import styles from "./LogIn.module.css";
+const url = `https://307inventoryproject-a0f3f8g3dhcedrek.westus3-01.azurewebsites.net`;
 
 const LogIn = ({ onLogin }) => {
     const navigate = useNavigate();

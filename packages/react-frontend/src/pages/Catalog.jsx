@@ -4,8 +4,8 @@ import Navbar from '../components/Navbar';
 import TableView from './TableView';
 import styles from './Catalog.module.css';
 import * as jwt_decode from "jwt-decode";
-const url = `https://307inventoryproject-a0f3f8g3dhcedrek.westus3-01.azurewebsites.net`
-// const url = `http://localhost:8000/`
+const url = `https://307inventoryproject-a0f3f8g3dhcedrek.westus3-01.azurewebsites.net`;
+// const url = `http://localhost:8000/`;
 
 
 const Catalog = () => {
