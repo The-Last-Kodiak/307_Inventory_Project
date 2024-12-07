@@ -2,15 +2,21 @@
   "name": "307_inventory_project",
   "version": "1.0.0",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "test": "echo \"No test cases specified\" && exit 0",
+    "test": "cross-env NODE_OPTIONS=--experimental-vm-modules jest --detectOpenHandles",
+    "jest": {
+      "transform": {}
+    },
     "preview": "vite preview"
   },
   "dependencies": {
     "bcrypt": "^5.1.1",
+    "cross-env": "^7.0.3",
+    "mongodb": "^6.11.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },
